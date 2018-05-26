@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import org.w3c.dom.Text;
 
 
@@ -60,6 +62,7 @@ public class NewHabit extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(NewHabit.this, "您已经选择了: " + which + ":" + Cycles[which],Toast.LENGTH_LONG).show();
 //                                dialog.dismiss();
                             }
                         }
