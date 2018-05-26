@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">Desire And Achievement</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="habit">Habit</string>
+    <string name="todo">Todo</string>
+    <string name="reward">Reward</string>
+    <string name="tv_habit">HHH</string>
+    <string name="tv_todo">TTT</string>
+    <string name="tv_reward">RRR</string>
+    <string name="new_habit_hint">Enter your new habit name</string>
+    <string name="new_todo_hint">Enter your new todo name</string>
+    <string name="new_reward_hint">Enter your new reward name</string>
+
+    <string name="save">SAVE</string>
+
+    <string name="gain_coin">Coin obtained</string>
+    <string name="times_cycle">Total times every cycle</string>
+    <string name="choose_cycle">Choose cycle length</string>
+    <string name="choose">Choose</string>
+
+    <string name="date">Date</string>
+    <string name="ddl">Choose Deadline</string>
+    <string name="choose_parent">Choose parent of new</string>
+    <string name="parent">Parent</string>
+
+    <string name="cost_coin">Coin consumed</string>
+    <string name="repeat">Repeated</string>
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="name">Name</string>
+</resources>
