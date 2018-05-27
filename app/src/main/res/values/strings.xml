@@ -23,11 +23,13 @@
     <string name="times_cycle">Total times every cycle</string>
     <string name="choose_cycle">Choose cycle length</string>
     <string name="choose">Choose</string>
+    <string name="your_cycle">Your cycle</string>
 
     <string name="date">Date</string>
     <string name="ddl">Choose Deadline</string>
-    <string name="choose_parent">Choose parent of new</string>
+    <string name="choose_parent_of_new">Choose parent of new</string>
     <string name="parent">Parent</string>
+    <string name="none">None</string>
 
     <string name="cost_coin">Coin consumed</string>
     <string name="repeat">Repeated</string>

@@ -12,7 +12,7 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:title="New Habit" >
+        app:title="New Habit">
 
         <Button
             android:id="@+id/save_habit"
@@ -79,9 +79,9 @@
                     android:id="@+id/times_cycle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
                     android:text="@string/times_cycle" />
 
                 <EditText
@@ -91,12 +91,13 @@
                     android:layout_marginEnd="10dp"
                     android:ems="3"
                     android:inputType="number"
-                    android:textAlignment="textEnd"/>
+                    android:textAlignment="textEnd" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="42dp"
+                android:onClick="chooseCycle"
                 android:orientation="horizontal">
 
                 <TextView
@@ -108,15 +109,14 @@
                     android:layout_weight="1"
                     android:text="@string/choose_cycle" />
 
-                <Button
-                    android:id="@+id/choose"
-                    style="@style/Widget.AppCompat.Button.Small"
+                <TextView
+                    android:id="@+id/your_cycle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginEnd="10dp"
-                    android:text="@string/choose"
-                    android:textSize="12sp"
-                    android:onClick="chooseCycle"/>
+                    android:text="@string/your_cycle" />
+
             </LinearLayout>
 
         </LinearLayout>

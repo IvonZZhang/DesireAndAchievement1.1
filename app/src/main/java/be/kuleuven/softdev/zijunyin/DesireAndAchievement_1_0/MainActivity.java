@@ -21,6 +21,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.HabitFragment;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.NewHabit;
@@ -40,8 +41,8 @@ public class MainActivity extends AppCompatActivity
     private HabitFragment mHabitFragment;
     private TodoFragment mTodoFragment;
     private RewardFragment mRewardFragment;
-    private FloatingActionButton fab;
-
+    private FloatingActionsMenu fab;
+    private int lastPosition;
 
 
     @Override
@@ -50,6 +51,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        fab = findViewById(R.id.multiple_actions);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -78,6 +81,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        fab.collapse();
+        onTabSelected(lastPosition);
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -85,6 +95,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+        fab.collapse();
     }
 
     @Override
@@ -148,6 +159,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onTabSelected(int position) {
+        lastPosition = position;
         Log.d(TAG, "onTabSelected() called with: " + "position = [" + position + "]");
         FragmentManager fm = this.getFragmentManager();
         //开启事务

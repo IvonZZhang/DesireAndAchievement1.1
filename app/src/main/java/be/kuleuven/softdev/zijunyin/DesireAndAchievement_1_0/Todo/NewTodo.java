@@ -12,14 +12,15 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
-
+import android.widget.TextView;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
 public class NewTodo extends AppCompatActivity{
-
-    private Button showdailog;
+    private TextView choosenDDL;
+    private TextView choosenParent;
     //选择日期Dialog
     private DatePickerDialog datePickerDialog;
 
@@ -34,16 +35,20 @@ public class NewTodo extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        showdailog = (Button) findViewById(R.id.choose_ddl);
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        String date=sdf.format(new java.util.Date());
+        choosenDDL = findViewById(R.id.choose_ddl);
+        choosenDDL.setText(date);
 
         calendar = Calendar.getInstance();
+
+        choosenParent = findViewById(R.id.parent);
+        choosenParent.setText(R.string.none);
 
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        //监听左上角的返回箭头
         if(item.getItemId()==android.R.id.home){
             finish();
             return true;
@@ -58,8 +63,8 @@ public class NewTodo extends AppCompatActivity{
 
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.choose_ddl:
-                showDailog();
+            case R.id.ddl_layout:
+                showDialog();
                 break;
             case R.id.choose_parent:
                 chooseParent();
@@ -67,24 +72,39 @@ public class NewTodo extends AppCompatActivity{
         }
     }
 
-    private void showDailog() {
-        datePickerDialog = new DatePickerDialog(
-                this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                //monthOfYear 得到的月份会减1所以我们要加1
-                String time = String.valueOf(year) + "　"
-                            + String.valueOf(monthOfYear + 1) + "  "
-                            + Integer.toString(dayOfMonth);
-                Log.d("测试", time);
-            }
-        },
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH));
-        datePickerDialog.show();
-        //自动弹出键盘问题解决
-        datePickerDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+    private void showDialog() {
+        new DatePickerDialog(
+                this,
+                // set listener
+                new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+                        choosenDDL.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                    }
+                }
+                , calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
+        )
+                .show();
+
+//                this, new DatePickerDialog.OnDateSetListener() {
+//            @Override
+//            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//                //monthOfYear 得到的月份会减1所以我们要加1
+//                String time = String.valueOf(year) + "　"
+//                            + String.valueOf(monthOfYear + 1) + "  "
+//                            + Integer.toString(dayOfMonth);
+//                Log.d("Test", time);
+//            }
+//        },
+//                calendar.get(Calendar.YEAR),
+//                calendar.get(Calendar.MONTH),
+//                calendar.get(Calendar.DAY_OF_MONTH)
+
+//        datePickerDialog.show();
+//        //自动弹出键盘问题解决
+//        datePickerDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
 

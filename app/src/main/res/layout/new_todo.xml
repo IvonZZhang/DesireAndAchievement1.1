@@ -71,9 +71,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ddl_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="42dp"
+                android:orientation="horizontal"
+                android:onClick="onClick">
 
                 <TextView
                     android:id="@+id/ddl"
@@ -84,40 +86,38 @@
                     android:layout_gravity="center_vertical"
                     android:text="@string/ddl" />
 
-                <Button
+                <TextView
                     android:id="@+id/choose_ddl"
-                    style="@style/Widget.AppCompat.Button.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:onClick="onClick"
-                    android:text="@string/date"
-                    android:textSize="12sp" />
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="10dp" />
+
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/choose_parent"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="42dp"
+                android:orientation="horizontal"
+                android:onClick="onClick">
 
                 <TextView
-                    android:id="@+id/choose_parent"
+                    android:id="@+id/choose_parent_of_new"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
-                    android:text="@string/choose_parent" />
+                    android:text="@string/choose_parent_of_new" />
 
-                <Button
+                <TextView
                     android:id="@+id/parent"
-                    style="@style/Widget.AppCompat.Button.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:onClick="onClick"
-                    android:text="@string/parent"
-                    android:textSize="12sp" />
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="10dp" />
+
             </LinearLayout>
 
         </LinearLayout>
