@@ -1,17 +1,12 @@
-package be.kuleuven.softdev.zijunyin.getthecelan;
+package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0;
 
-import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 //import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.SubMenu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,13 +16,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
+
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.HabitFragment;
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.NewHabit;
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Reward.NewReward;
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Reward.RewardFragment;
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo.NewTodo;
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo.TodoFragment;
 
 
 public class MainActivity extends AppCompatActivity
@@ -48,20 +48,20 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         //添加底部导航栏
-        BottomNavigationBar bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
+        BottomNavigationBar bottomNavigationBar = findViewById(R.id.bottom_navigation_bar);
 
         BottomNavigationItem habititem = new BottomNavigationItem(R.drawable.ic_habit_off, "Habit");
         BottomNavigationItem todoitem = new BottomNavigationItem(R.drawable.ic_todo_off, "Todo");
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -140,8 +140,9 @@ public class MainActivity extends AppCompatActivity
     private void setDefaultFragment() {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
-        mHabitFragment = HabitFragment.newInstance("习惯");
-        transaction.replace(R.id.tb, mHabitFragment);
+        //mHabitFragment = HabitFragment.newInstance("习惯");
+        mHabitFragment = new HabitFragment();
+        transaction.replace(R.id.mainDisplay, mHabitFragment);
         transaction.commit();
     }
 
@@ -154,21 +155,24 @@ public class MainActivity extends AppCompatActivity
         switch (position) {
             case 0:
                 if (mHabitFragment == null) {
-                    mHabitFragment = HabitFragment.newInstance("习惯");
+                    //mHabitFragment = HabitFragment.newInstance();
+                    mHabitFragment = new HabitFragment();
                 }
-                transaction.replace(R.id.tb, mHabitFragment);
+                transaction.replace(R.id.mainDisplay, mHabitFragment);
                 break;
             case 1:
                 if (mTodoFragment == null) {
-                    mTodoFragment = TodoFragment.newInstance("待办");
+                    //mTodoFragment = TodoFragment.newInstance("待办");
+                    mTodoFragment = new TodoFragment();
                 }
-                transaction.replace(R.id.tb, mTodoFragment);
+                transaction.replace(R.id.mainDisplay, mTodoFragment);
                 break;
             case 2:
                 if (mRewardFragment == null) {
-                    mRewardFragment = RewardFragment.newInstance("奖励");
+                    //mRewardFragment = RewardFragment.newInstance("奖励");
+                    mRewardFragment = new RewardFragment();
                 }
-                transaction.replace(R.id.tb, mRewardFragment);
+                transaction.replace(R.id.mainDisplay, mRewardFragment);
                 break;
             default:
                 break;

@@ -33,6 +33,28 @@
     <string name="repeat">Repeated</string>
 
 
+    <string name="title_activity_habit">HabitActivity</string>
+    <string name="cycle">CycleAndTimes</string>
+    <string name="times">Times</string>
+    <string name="habitname">habitName</string>
+    <string name="plus">+</string>
+    <string name="coinNumber">coinNumber</string>
+    <string name="next_ddl">Next DDL</string>
+    <string name="todoname">todoName</string>
+    <string name="expandableicon">expandableIcon</string>
+    <string name="icontoanotheracivity">IconToAnotherActivity</string>
+    <string name="ToAnotherActivity">ToAnotherActivity</string>
+    <string name="icontoalertdialog">IconToAlertDialog</string>
+    <string name="toalertdialog">ToAlertDialog</string>
+    <string name="icontoswitch">IconToSwitch</string>
+    <string name="toSwitch">ToSwitch</string>
+    <string name="textselected">TextSelected</string>
+    <string name="please_choose_your_language">Please Choose Your Language</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="name">Name</string>
+    <string name="rewardname">RewardName</string>
+    <string name="isrepeat">isRepeat</string>
 </resources>

@@ -1,4 +1,4 @@
-package be.kuleuven.softdev.zijunyin.getthecelan;
+package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("be.kuleuven.softdev.zijunyin.getthecelan", appContext.getPackageName());
+        assertEquals("be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0", appContext.getPackageName());
     }
 }

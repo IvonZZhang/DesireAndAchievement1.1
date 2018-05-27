@@ -1,20 +1,16 @@
-package be.kuleuven.softdev.zijunyin.getthecelan;
+package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
 
 public class NewHabit extends AppCompatActivity {
@@ -24,10 +20,12 @@ public class NewHabit extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_habit);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.new_habit_toolbar);
+        Toolbar toolbar = findViewById(R.id.new_habit_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+
 
     }
 
@@ -48,7 +46,7 @@ public class NewHabit extends AppCompatActivity {
         int times;
         String cycle;
 
-        EditText editText1 =(EditText)findViewById(R.id.new_habit_name);
+        EditText editText1 = findViewById(R.id.new_habit_name);
         habit_name = editText1.getText().toString();
 
 

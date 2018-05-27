@@ -1,4 +1,4 @@
-package be.kuleuven.softdev.zijunyin.getthecelan;
+package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0;
 
 import org.junit.Test;
 

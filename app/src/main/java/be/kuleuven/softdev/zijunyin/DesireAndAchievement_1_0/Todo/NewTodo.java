@@ -1,8 +1,7 @@
-package be.kuleuven.softdev.zijunyin.getthecelan;
+package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +14,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 
 import java.util.Calendar;
+
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
 public class NewTodo extends AppCompatActivity{
 

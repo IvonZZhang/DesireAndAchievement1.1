@@ -1,10 +1,12 @@
-package be.kuleuven.softdev.zijunyin.getthecelan;
+package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Reward;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
 public class NewReward extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
