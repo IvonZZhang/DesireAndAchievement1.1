@@ -34,6 +34,14 @@
     <string name="cost_coin">Coin consumed</string>
     <string name="repeat">Repeated</string>
 
+    <string name="Coins">Coins:</string>
+    <string name="default_coin_number">0</string>
+
+    <string name="user_manual">User manual</string>
+    <string name="language">Language</string>
+    <string name="default_page">Default page</string>
+    <string name="first_weekday">The first weekday</string>
+    <string name="about">About</string>
 
     <string name="title_activity_habit">HabitActivity</string>
     <string name="cycle">CycleAndTimes</string>
