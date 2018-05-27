@@ -78,12 +78,12 @@
             android:text="@string/habitname"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/CycleAndTimes"
+            app:layout_constraintBottom_toTopOf="@+id/deadline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/CycleAndTimes"
+            android:id="@+id/deadline"
             android:layout_width="133dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"

@@ -1,169 +1,172 @@
 package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Typeface;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.HashMap;
-import java.util.List;
+import com.daimajia.swipe.SwipeLayout;
+import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
-//For expandable list view use BaseExpandableListAdapter
-public class TodoAdapter extends BaseExpandableListAdapter {
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
+public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
     private Context context;
-    //private List<String> header; // header titles
-    private List<TodoDataModel> parentTodo;
-    // Child data in format of header title, child title
-    //private HashMap<String, List<String>> child;
-    private HashMap<TodoDataModel, List<TodoDataModel>> childTodo;
+    private ArrayList<TodoDataModel> todoArray;
 
-    public TodoAdapter(Context context, List<TodoDataModel> listDataHeader,
-                       HashMap<TodoDataModel, List<TodoDataModel>> listChildData) {
+    public TodoAdapter(@NonNull Context context, ArrayList<TodoDataModel> todoArray) {
         this.context = context;
-        this.parentTodo = listDataHeader;
-        this.childTodo = listChildData;
+        this.todoArray = todoArray;
     }
 
     @Override
-    public TodoDataModel getChild(int groupPosition, int childPosititon) {
-
-        // This will return the child
-        return this.childTodo.get(this.parentTodo.get(groupPosition)).get(
-                childPosititon);
+    public TodoAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.fragment_todo, parent, false);
+        return new TodoAdapter.ViewHolder(view);
     }
 
     @Override
-    public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
-    }
+    public void onBindViewHolder(final TodoAdapter.ViewHolder holder, final int position) {
+        //Assign values
+        holder.mTodo = todoArray.get(position);
+        holder.todoName.setText(todoArray.get(position).getTodoName());
+        holder.deadline.setText(todoArray.get(position).getTodoDDL());
+        holder.coinNumber.setText(String.format("+ %s", todoArray.get(position).getRewardCoins()));
 
-    @Override
-    public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-
-        // Getting child text
-        //final String childText = (String) getChild(groupPosition, childPosition);
-        final TodoDataModel childd = getChild(groupPosition, childPosition);
-
-        // Inflating child layout and setting textview
-//        if (convertView == null) {
-//            LayoutInflater childInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            convertView = childInflater.inflate(R.layout.todo_child, parent, false);
-//        }
-        LayoutInflater childInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View customView = childInflater.inflate(R.layout.todo_child, parent, false);
-
-        //TodoDataModel ttodo = getChild(groupPosition, childPosition);
-
-        TextView todoName = customView.findViewById(R.id.todoName);
-        TextView deadline = customView.findViewById(R.id.ddlText);
-        //TextView plus = customView.findViewById(R.id.plus);
-        TextView coinNumber = customView.findViewById(R.id.coinNumber);
-
-        //TextView child_text = convertView.findViewById(R.id.todoName);
-
-        //child_text.setText(childText);
-
-        todoName.setText(childd.getTxtTodoName());
-        deadline.setText(childd.getTxtDeadline());
-        //plus.setText("+");
-        coinNumber.setText(childd.getTxtCoinNumber());
-
-        return customView;
-    }
-
-    @Override
-    public int getChildrenCount(int groupPosition) {
-
-        // return children count
-        return this.childTodo.get(this.parentTodo.get(groupPosition)).size();
-    }
-
-    @Override
-    public TodoDataModel getGroup(int groupPosition) {
-
-        // Get header position
-        return this.parentTodo.get(groupPosition);
-    }
-
-    @Override
-    public int getGroupCount() {
-
-        // Get header size
-        return this.parentTodo.size();
-    }
-
-    @Override
-    public long getGroupId(int groupPosition) {
-        return groupPosition;
-    }
-
-    @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-
-        // Getting header title
-        //String headerTitle = (String) getGroup(groupPosition);
-        TodoDataModel parentTitle = (TodoDataModel) getGroup(groupPosition);
-
-        // Inflating header layout and setting text
-//        if (convertView == null) {
-//            LayoutInflater infalInflater = (LayoutInflater) this.context
-//                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            convertView = infalInflater.inflate(R.layout.todo_header, parent, false);
-//        }
-
-        LayoutInflater parentInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View customView = parentInflater.inflate(R.layout.todo_header, parent, false);
-
-        //TextView header_text = (TextView) convertView.findViewById(R.id.todoName);
-
-        TodoDataModel todo = getGroup(groupPosition);
-
-        TextView todoName = customView.findViewById(R.id.todoName);
-        TextView deadline = customView.findViewById(R.id.ddlText);
-        //TextView plus = customView.findViewById(R.id.plus);
-        //TextView coinNumber = customView.findViewById(R.id.coinNumber);
-        ImageView expandableIcon = customView.findViewById(R.id.expandableIcon);
-
-        //TextView child_text = convertView.findViewById(R.id.todoName);
-
-        //child_text.setText(childText);
-
-        todoName.setText(parentTitle.getTxtTodoName());
-        deadline.setText(parentTitle.getTxtDeadline());
-        //plus.setText("+");
-        //coinNumber.setText(parentTitle.getTxtCoinNumber());
-
-        //header_text.setText(headerTitle);
-
-        // If group is expanded then change the text into bold and change the
-        // icon
-        if (isExpanded) {
-            todoName.setTypeface(null, Typeface.BOLD);
-            expandableIcon.setBackgroundResource(R.drawable.ic_expandable_up);
-        } else {
-            // If group is not expanded then change the text back into normal
-            // and change the icon
-            todoName.setTypeface(null, Typeface.NORMAL);
-            expandableIcon.setBackgroundResource(R.drawable.ic_expandable_down);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");// TODO: 2018/5/27 check the date format from JSON
+        Date convertedDate = new Date();
+        try {
+            convertedDate = dateFormat.parse(holder.deadline.getText().toString());
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if(convertedDate.before(Calendar.getInstance().getTime())){
+            holder.coinNumber.setText(R.string.overdue);
+            holder.coinNumber.setTextColor(Color.WHITE);
+            holder.coinNumber.setBackgroundColor(Color.RED);
         }
 
-        return customView;
+        //Create swipe menu
+        holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
+        //dari kiri
+        holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.bottom_wrapper1));
+        //dari kanan
+        holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.bottom_wraper));
+
+        //Create swipe listener
+        holder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
+            @Override
+            public void onStartOpen(SwipeLayout layout) {}
+
+            @Override
+            public void onOpen(SwipeLayout layout) {}
+
+            @Override
+            public void onStartClose(SwipeLayout layout) {}
+
+            @Override
+            public void onClose(SwipeLayout layout) {}
+
+            @Override
+            public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {}
+
+            @Override
+            public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {}
+        });
+
+        //Set On Click Listener to menu elements
+        holder.btnLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "Clicked on Information ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        holder.Share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Toast.makeText(view.getContext(), "Clicked on Share ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        holder.Edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Toast.makeText(view.getContext(), "Clicked on Edit  ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        holder.Delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mItemManger.removeShownLayouts(holder.swipeLayout);
+                todoArray.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, todoArray.size());
+                mItemManger.closeAllItems();
+                Toast.makeText(v.getContext(), "Deleted ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //apply ViewHolder
+        mItemManger.bindView(holder.itemView, position);
     }
 
     @Override
-    public boolean hasStableIds() {
-        return false;
+    public int getItemCount() {
+        return todoArray.size();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+        //public View mView;
+        SwipeLayout swipeLayout;
+
+        TextView todoName;
+        TextView deadline;
+        TextView coinNumber;
+
+        TextView Delete;
+        TextView Edit;
+        TextView Share;
+        ImageButton btnLocation;
+        TodoDataModel mTodo;
+
+        ViewHolder(View view) {
+            super(view);
+
+            //mView = view;
+            swipeLayout = itemView.findViewById(R.id.swipe);
+            todoName = view.findViewById(R.id.todoName);
+            deadline = view.findViewById(R.id.deadline);
+            coinNumber = view.findViewById(R.id.coinNumber);
+            Delete = itemView.findViewById(R.id.Delete);
+            Edit = itemView.findViewById(R.id.Edit);
+            Share = itemView.findViewById(R.id.Share);
+            btnLocation = itemView.findViewById(R.id.btnLocation);
+        }
     }
 
     @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
+    public int getSwipeLayoutResourceId(int position) {
+        return R.id.swipe;
     }
 }
-

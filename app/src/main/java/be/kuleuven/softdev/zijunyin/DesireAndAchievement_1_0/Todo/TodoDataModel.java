@@ -1,35 +1,34 @@
 package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo;
 
-
 public class TodoDataModel {
-    private String txtTodoName;
-    private String txtDeadline;
-    private String txtCoinNumber;
-    private Boolean isGroup;
+    private String todoName;
+    private String todoDDL;
+    private String RewardCoins;
+    //private boolean isDeleted;
 
     public TodoDataModel() {
     }
 
-    TodoDataModel(String txtTodoName, String txtDeadline, String txtCoinNumber, Boolean isGroup) {
-        this.txtTodoName = txtTodoName;
-        this.txtDeadline = txtDeadline;
-        this.txtCoinNumber = txtCoinNumber;
-        this.isGroup = isGroup;
+    public TodoDataModel(String todoName, String todoDDL, String rewardCoins) {
+        this.todoName = todoName;
+        this.todoDDL = todoDDL;
+        RewardCoins = rewardCoins;
+        //this.isDeleted = isDeleted;
     }
 
-    String getTxtTodoName() {
-        return txtTodoName;
+    public String getTodoName() {
+        return todoName;
     }
 
-    String getTxtDeadline() {
-        return txtDeadline;
+    public String getTodoDDL() {
+        return todoDDL;
     }
 
-    String getTxtCoinNumber() {
-        return txtCoinNumber;
+    public String getRewardCoins() {
+        return RewardCoins;
     }
 
-    Boolean isGroup() {
-        return isGroup;
-    }
+    //public boolean isDeleted() {
+        //return isDeleted;
+    //}
 }

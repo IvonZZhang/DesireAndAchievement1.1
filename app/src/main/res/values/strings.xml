@@ -57,4 +57,7 @@
     <string name="name">Name</string>
     <string name="rewardname">RewardName</string>
     <string name="isrepeat">isRepeat</string>
+    <string name="todo_name">Todo Name</string>
+    <string name="deadline">Deadline</string>
+    <string name="overdue">OVERDUE</string>
 </resources>

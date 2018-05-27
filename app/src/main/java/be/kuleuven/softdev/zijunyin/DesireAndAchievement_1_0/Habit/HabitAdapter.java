@@ -29,7 +29,7 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(context)
                 .inflate(R.layout.fragment_habit, parent, false);
         return new HabitAdapter.ViewHolder(view);
     }
@@ -73,8 +73,8 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
         //Set On Click Listener to menu elements
         holder.btnLocation.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Clicked on Information ", Toast.LENGTH_SHORT).show();
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(), "Clicked on Information ", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -96,13 +96,13 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
 
         holder.Delete.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 mItemManger.removeShownLayouts(holder.swipeLayout);
                 habitArray.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, habitArray.size());
                 mItemManger.closeAllItems();
-                Toast.makeText(v.getContext(), "Deleted ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), "Deleted ", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -135,7 +135,7 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
             //mView = view;
             swipeLayout = itemView.findViewById(R.id.swipe);
             habitName = view.findViewById(R.id.habitName);
-            CycleAndTimes = view.findViewById(R.id.CycleAndTimes);
+            CycleAndTimes = view.findViewById(R.id.deadline);
             coinNumber = view.findViewById(R.id.coinNumber);
             Delete = itemView.findViewById(R.id.Delete);
             Edit = itemView.findViewById(R.id.Edit);

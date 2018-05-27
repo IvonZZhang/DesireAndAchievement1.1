@@ -39,4 +39,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_expandable_down" />
 
+    <LinearLayout
+        android:id="@+id/childLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"></LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

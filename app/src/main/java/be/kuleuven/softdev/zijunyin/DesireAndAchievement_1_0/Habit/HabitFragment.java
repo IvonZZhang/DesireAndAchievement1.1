@@ -34,27 +34,18 @@ public class HabitFragment extends Fragment {
     public HabitFragment() {
     }
 
-//    public static HabitFragment newInstance(String param1){
-//        HabitFragment fragment = new HabitFragment();
-//        Bundle args = new Bundle();
-//        args.putString("agrs1", param1);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
+/*TODO: refresh the list every time it has changed*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_habit_list, container, false);
 
-        habitList = (RecyclerView) view.findViewById(R.id.habitRecyclerView);
+        habitList = view.findViewById(R.id.habitRecyclerView);
         habitList.setLayoutManager(new LinearLayoutManager(getContext()));
         habitArray = new ArrayList<>();
 
         String url ="http://api.a17-sd603.studev.groept.be/testHabit";
-
-        //final ArrayList<HabitDataModel> habitArray = new ArrayList<HabitDataModel>();
-        //HabitDataModel habitDataModel = new HabitDataModel();
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(getContext());
@@ -64,13 +55,6 @@ public class HabitFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        //mTextView.setText("Response is: "+ response.substring(0,500));
-                        System.out.println(response);
-
-                        //parse JSON to String
-                        //String result = "";
-
                         try{
                             JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
                             for(int i = 0; i < jArr.length(); i++){
@@ -80,34 +64,26 @@ public class HabitFragment extends Fragment {
                                 String curTimesPerCycle = jObj.getString("TimesPerCycle");
                                 String curTimesDone = jObj.getString("TimesDone");
                                 String curRewardCoins = jObj.getString("RewardCoins");
-                                //result += curHabitName + " " + curHabitCycle + curTimesPerCycle + curTimesDone + curRewardCoins;//###String can also use +=
-                                //if(jObj.getInt("isDeleted") == 0){
-                                habitArray.add(
-                                        new HabitDataModel(curHabitName, curHabitCycle + " " + curTimesDone + "/" + curTimesPerCycle, "+" + curRewardCoins)
-                                );
-                                //}
+                                if(jObj.getInt("isDeleted") == 0){
+                                    habitArray.add(
+                                            new HabitDataModel(curHabitName, curHabitCycle + " " + curTimesDone + "/" + curTimesPerCycle, "+" + curRewardCoins)
+                                    );
+                                }
                             }
                             HabitAdapter habitAdapter = new HabitAdapter(getContext(), habitArray);
                             habitAdapter.setMode(Attributes.Mode.Single);
                             habitList.setAdapter(habitAdapter);
                         }
-                        catch (JSONException e){
-                            System.out.println( e );
+                        catch (JSONException e) {
+                            System.out.println(e);
                         }
-
-//                        ListView habitList = (ListView) findViewById(R.id.HabitListView);
-
-
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //mTextView.setText("That didn't work!");
                 System.out.println("failed to work");
             }
         });
-
-        // Add the request to the RequestQueue.
         queue.add(stringRequest);
 
         /*if(habitArray.isEmpty()){
