@@ -39,7 +39,7 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
     public void onBindViewHolder(final RewardAdapter.ViewHolder holder, final int position) {
         //Assign values
         holder.mReward = rewardArray.get(position);
-        holder.rewardName.setText(rewardArray.get(position).getTxtRewardName());
+        holder.rewardName.setText(rewardArray.get(position).getName());
 
         if(rewardArray.get(position).isRepeated().equals("1")){
             holder.isRepeated.setImageResource(R.drawable.ic_repeat);
@@ -48,7 +48,7 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
             holder.isRepeated.setImageResource(R.drawable.ic_one_time);
         }
 
-        holder.coinNumber.setText(rewardArray.get(position).getTxtCoinNumber());
+        holder.coinNumber.setText(rewardArray.get(position).getCoins());
 
         //Create swipe menu
         holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
@@ -79,18 +79,12 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
         });
 
         //Set On Click Listener to menu elements
-        holder.btnLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Clicked on Information ", Toast.LENGTH_SHORT).show();
-            }
-        });
 
-        holder.Share.setOnClickListener(new View.OnClickListener() {
+        holder.Complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(view.getContext(), "Clicked on Share ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), "Clicked on Complete ", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -131,10 +125,9 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
         ImageView isRepeated;
         TextView coinNumber;
 
-        TextView Delete;
-        TextView Edit;
-        TextView Share;
-        ImageButton btnLocation;
+        ImageButton Delete;
+        ImageButton Edit;
+        ImageButton Complete;
         RewardDataModel mReward;
 
         ViewHolder(View view) {
@@ -147,8 +140,7 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
             coinNumber = view.findViewById(R.id.coinNumber);
             Delete = itemView.findViewById(R.id.Delete);
             Edit = itemView.findViewById(R.id.Edit);
-            Share = itemView.findViewById(R.id.Share);
-            btnLocation = itemView.findViewById(R.id.btnLocation);
+            Complete = itemView.findViewById(R.id.Complete);
         }
     }
 

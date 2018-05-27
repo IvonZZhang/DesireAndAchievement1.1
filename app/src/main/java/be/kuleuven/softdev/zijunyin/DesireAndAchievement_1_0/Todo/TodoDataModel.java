@@ -1,34 +1,27 @@
 package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo;
 
-public class TodoDataModel {
-    private String todoName;
-    private String todoDDL;
-    private String RewardCoins;
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DataModel;
+
+public class TodoDataModel extends DataModel {
     //private boolean isDeleted;
+    private String todoDDL;
 
     public TodoDataModel() {
     }
 
     public TodoDataModel(String todoName, String todoDDL, String rewardCoins) {
-        this.todoName = todoName;
+        super();
+        this.name = todoName;
         this.todoDDL = todoDDL;
-        RewardCoins = rewardCoins;
+        this.coins = rewardCoins;
         //this.isDeleted = isDeleted;
-    }
-
-    public String getTodoName() {
-        return todoName;
-    }
-
-    public String getTodoDDL() {
-        return todoDDL;
-    }
-
-    public String getRewardCoins() {
-        return RewardCoins;
     }
 
     //public boolean isDeleted() {
         //return isDeleted;
     //}
+
+    public String getTodoDDL() {
+        return todoDDL;
+    }
 }

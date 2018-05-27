@@ -1,30 +1,23 @@
 package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit;
 
-public class HabitDataModel {
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DataModel;
 
-    private String txtHabitName;
+public class HabitDataModel extends DataModel {
+
     private String txtCycleAndTimes;
-    private String txtCoinNumber;
 
     public HabitDataModel() {
     }
 
-    HabitDataModel(String txtHabitName, String txtCycleAndTimes, String txtCoinNumber) {
-        this.txtHabitName = txtHabitName;
+    public HabitDataModel(String txtHabitName, String txtCycleAndTimes, String txtCoinNumber) {
+        super();
+        this.name = txtHabitName;
         this.txtCycleAndTimes = txtCycleAndTimes;
         //this.txtTimes = txtTimes;
-        this.txtCoinNumber = txtCoinNumber;
-    }
-
-    String getTxtHabitName() {
-        return txtHabitName;
+        this.coins = txtCoinNumber;
     }
 
     String getTxtCycleAndTimes() {
         return txtCycleAndTimes;
-    }
-
-    String getTxtCoinNumber() {
-        return txtCoinNumber;
     }
 }

@@ -45,11 +45,11 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
     public void onBindViewHolder(final TodoAdapter.ViewHolder holder, final int position) {
         //Assign values
         holder.mTodo = todoArray.get(position);
-        holder.todoName.setText(todoArray.get(position).getTodoName());
+        holder.todoName.setText(todoArray.get(position).getName());
         holder.deadline.setText(todoArray.get(position).getTodoDDL());
-        holder.coinNumber.setText(String.format("+ %s", todoArray.get(position).getRewardCoins()));
+        holder.coinNumber.setText(String.format("+ %s", todoArray.get(position).getCoins()));
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");// TODO: 2018/5/27 check the date format from JSON
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date convertedDate = new Date();
         try {
             convertedDate = dateFormat.parse(holder.deadline.getText().toString());
@@ -92,18 +92,11 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
         });
 
         //Set On Click Listener to menu elements
-        holder.btnLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Clicked on Information ", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        holder.Share.setOnClickListener(new View.OnClickListener() {
+        holder.Complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(view.getContext(), "Clicked on Share ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), "Clicked on Complete ", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -144,10 +137,9 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
         TextView deadline;
         TextView coinNumber;
 
-        TextView Delete;
-        TextView Edit;
-        TextView Share;
-        ImageButton btnLocation;
+        ImageButton Delete;
+        ImageButton Edit;
+        ImageButton Complete;
         TodoDataModel mTodo;
 
         ViewHolder(View view) {
@@ -160,8 +152,7 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
             coinNumber = view.findViewById(R.id.coinNumber);
             Delete = itemView.findViewById(R.id.Delete);
             Edit = itemView.findViewById(R.id.Edit);
-            Share = itemView.findViewById(R.id.Share);
-            btnLocation = itemView.findViewById(R.id.btnLocation);
+            Complete = itemView.findViewById(R.id.Complete);
         }
     }
 

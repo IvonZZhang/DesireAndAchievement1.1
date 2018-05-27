@@ -22,7 +22,7 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
     private Context context;
     private ArrayList<HabitDataModel> habitArray;
 
-    HabitAdapter(@NonNull Context context, ArrayList<HabitDataModel> habitArray) {
+    public HabitAdapter(@NonNull Context context, ArrayList<HabitDataModel> habitArray) {
         this.context = context;
         this.habitArray = habitArray;
     }
@@ -38,9 +38,9 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
     public void onBindViewHolder(final HabitAdapter.ViewHolder holder, final int position) {
         //Assign values
         holder.mHabit = habitArray.get(position);
-        holder.habitName.setText(habitArray.get(position).getTxtHabitName());
+        holder.habitName.setText(habitArray.get(position).getName());
         holder.CycleAndTimes.setText(habitArray.get(position).getTxtCycleAndTimes());
-        holder.coinNumber.setText(habitArray.get(position).getTxtCoinNumber());
+        holder.coinNumber.setText(habitArray.get(position).getCoins());
 
         //Create swipe menu
         holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
@@ -71,18 +71,18 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
         });
 
         //Set On Click Listener to menu elements
-        holder.btnLocation.setOnClickListener(new View.OnClickListener() {
+        /*holder.btnLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(view.getContext(), "Clicked on Information ", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
-        holder.Share.setOnClickListener(new View.OnClickListener() {
+        holder.Complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(view.getContext(), "Clicked on Share ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), "Clicked on Achieved ", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -123,10 +123,10 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
         TextView CycleAndTimes;
         TextView coinNumber;
 
-        TextView Delete;
-        TextView Edit;
-        TextView Share;
-        ImageButton btnLocation;
+        ImageButton Delete;
+        ImageButton Edit;
+        ImageButton Complete;
+        //ImageButton btnLocation;
         HabitDataModel mHabit;
 
         ViewHolder(View view) {
@@ -139,8 +139,8 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
             coinNumber = view.findViewById(R.id.coinNumber);
             Delete = itemView.findViewById(R.id.Delete);
             Edit = itemView.findViewById(R.id.Edit);
-            Share = itemView.findViewById(R.id.Share);
-            btnLocation = itemView.findViewById(R.id.btnLocation);
+            Complete = itemView.findViewById(R.id.Complete);
+            //btnLocation = itemView.findViewById(R.id.btnLocation);
         }
     }
 

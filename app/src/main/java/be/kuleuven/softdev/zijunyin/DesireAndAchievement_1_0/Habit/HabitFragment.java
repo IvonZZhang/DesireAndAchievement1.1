@@ -108,4 +108,9 @@ public class HabitFragment extends Fragment {
         return view;
     }
 
+//    public void refreshHabits(ArrayList<HabitDataModel> habits) {
+//        this.habitArray.clear();
+//        this.habitArray.addAll(habits);
+//        notifyDataSetChanged();
+//    }
 }

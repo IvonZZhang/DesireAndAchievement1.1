@@ -62,4 +62,7 @@
     <string name="todo_name">Todo Name</string>
     <string name="deadline">Deadline</string>
     <string name="overdue">OVERDUE</string>
+    <string name="edit">edit</string>
+    <string name="complete">complete</string>
+    <string name="delete">delete</string>
 </resources>
