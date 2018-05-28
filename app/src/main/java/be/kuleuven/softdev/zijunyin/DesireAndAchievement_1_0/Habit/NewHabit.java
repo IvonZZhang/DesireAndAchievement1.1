@@ -72,33 +72,17 @@ public class NewHabit extends AppCompatActivity {
                 coins+"/"+
                 "0";
 
-        //final ArrayList<HabitDataModel> habitArray = new ArrayList<HabitDataModel>();
-        //HabitDataModel habitDataModel = new HabitDataModel();
-
-        // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(getBaseContext());
-
-        // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        //mTextView.setText("Response is: "+ response.substring(0,500));
-                        System.out.println(response);
-
-                        //parse JSON to String
-                        //String result = "";
-                    }
+                    public void onResponse(String response) {}
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //mTextView.setText("That didn't work!");
                 System.out.println("failed to work");
             }
         });
-
-        // Add the request to the RequestQueue.
         queue.add(stringRequest);
 
         finish();

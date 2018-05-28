@@ -14,8 +14,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
+import com.daimajia.swipe.util.Attributes;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
@@ -111,6 +122,22 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
         holder.Delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String url = "http://api.a17-sd603.studev.groept.be/change_todo_delete_status/" + todoArray.get(position).getName();
+                System.out.println(todoArray.get(position).getName());
+
+                RequestQueue queue = Volley.newRequestQueue(context);
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {}
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println("failed to work");
+                    }
+                });
+                queue.add(stringRequest);
+
                 mItemManger.removeShownLayouts(holder.swipeLayout);
                 todoArray.remove(position);
                 notifyItemRemoved(position);

@@ -47,10 +47,7 @@ public class TodoFragment extends Fragment {
 
         String url ="http://api.a17-sd603.studev.groept.be/testTodo";
 
-        // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(getContext());
-
-        // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override

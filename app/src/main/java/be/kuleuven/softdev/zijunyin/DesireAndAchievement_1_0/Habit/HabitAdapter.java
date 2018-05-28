@@ -10,6 +10,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 
@@ -97,6 +103,21 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
         holder.Delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String url = "http://api.a17-sd603.studev.groept.be/change_habit_delete_status/" + habitArray.get(position).getName();
+
+                RequestQueue queue = Volley.newRequestQueue(context);
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {}
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println("failed to work");
+                    }
+                });
+                queue.add(stringRequest);
+
                 mItemManger.removeShownLayouts(holder.swipeLayout);
                 habitArray.remove(position);
                 notifyItemRemoved(position);
