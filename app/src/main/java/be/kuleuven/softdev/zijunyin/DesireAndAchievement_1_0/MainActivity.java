@@ -261,4 +261,7 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    public String getFistDay(){
+        return "first day";
+    }
 }

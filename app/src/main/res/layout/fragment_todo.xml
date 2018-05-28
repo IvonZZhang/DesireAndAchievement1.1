@@ -11,20 +11,10 @@
 
     <LinearLayout
         android:id="@+id/bottom_wraper"
-        android:layout_width="160dp"
-        android:weightSum="2"
+        android:layout_width="80dp"
+        android:weightSum="1"
         android:orientation="horizontal"
         android:layout_height="match_parent">
-
-        <ImageButton
-            android:id="@+id/Edit"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/green"
-            android:contentDescription="@string/edit"
-            android:gravity="center"
-            android:src="@drawable/ic_edit" />
 
         <ImageButton
             android:id="@+id/Complete"

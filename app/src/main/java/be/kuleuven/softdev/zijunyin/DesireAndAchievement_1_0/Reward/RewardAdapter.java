@@ -1,3 +1,25 @@
+//                            _ooOoo_
+//                           o8888888o
+//                           88" . "88
+//                           (| -_- |)
+//                            O\ = /O
+//                        ____/`---'\____
+//                      .   ' \\| |// `.
+//                       / \\||| : |||// \
+//                     / _||||| -:- |||||- \
+//                       | | \\\ - /// | |
+//                     | \_| ''\---/'' | |
+//                      \ .-\__ `-` ___/-. /
+//                   ___`. .' /--.--\ `. . __
+//                ."" '< `.___\_<|>_/___.' >'"".
+//               | | : `- \`.;`\ _ /`;.`/ - ` : | |
+//                 \ \ `-. \_ __\ /__ _/ .-` / /
+//         ======`-.____`-.___\_____/___.-`____.-'======
+//                            `=---='
+//          Buddha protect my code from bugs.
+//          God bless Buddha.
+
+
 package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Reward;
 
 import android.content.Context;
@@ -10,13 +32,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 
@@ -25,7 +40,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
-import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Reward.RewardDataModel;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
 import java.util.ArrayList;
@@ -107,15 +121,9 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
                 //add new coins from achieved
                 url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
                 DBManager.callServer(url, context);
-                Toast.makeText(view.getContext(), "Clicked on Complete ", Toast.LENGTH_SHORT).show();
-            }
-        });
+                Toast.makeText(view.getContext(), "", Toast.LENGTH_SHORT).show();
 
-        holder.Edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Toast.makeText(view.getContext(), "Clicked on Edit  ", Toast.LENGTH_SHORT).show();
+                holder.swipeLayout.close();
             }
         });
 
@@ -153,7 +161,6 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
         TextView coinNumber;
 
         ImageButton Delete;
-        ImageButton Edit;
         ImageButton Complete;
         RewardDataModel mReward;
 
@@ -166,7 +173,6 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
             isRepeated = view.findViewById(R.id.is_repeat);
             coinNumber = view.findViewById(R.id.coinNumber);
             Delete = itemView.findViewById(R.id.Delete);
-            Edit = itemView.findViewById(R.id.Edit);
             Complete = itemView.findViewById(R.id.Complete);
         }
     }

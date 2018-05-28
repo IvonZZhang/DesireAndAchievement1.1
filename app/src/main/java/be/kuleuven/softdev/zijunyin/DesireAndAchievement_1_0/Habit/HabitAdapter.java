@@ -10,12 +10,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 
@@ -31,6 +25,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> {
@@ -38,17 +34,20 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
     private Context context;
     private ArrayList<HabitDataModel> habitArray;
     private int curCoins;
+    private String firstDayOfWeek;
     private String url;
 
     public HabitAdapter(@NonNull Context context, ArrayList<HabitDataModel> habitArray) {
         this.context = context;
         this.habitArray = habitArray;
+        firstDayOfWeek = "Monday";
         curCoins = 0;
         Consumer<String> consumer = this::getCurCoins;
         url = "http://api.a17-sd603.studev.groept.be/get_coins";
         DBManager.callServer(url, context, consumer);
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context)
@@ -57,12 +56,12 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(final HabitAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final HabitAdapter.ViewHolder holder, final int position) {
         //Assign values
         holder.mHabit = habitArray.get(position);
         holder.habitName.setText(habitArray.get(position).getName());
-        holder.CycleAndTimes.setText(habitArray.get(position).getTxtCycleAndTimes());
-        holder.coinNumber.setText(habitArray.get(position).getCoins());
+        holder.CycleAndTimes.setText(String.format("%s %s/%s", habitArray.get(position).getHabitCycle(), habitArray.get(position).getTimesDone(), habitArray.get(position).getTimesPerCycle()));
+        holder.coinNumber.setText(String.format("+%s", habitArray.get(position).getCoins()));
 
         //Create swipe menu
         holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
@@ -100,89 +99,141 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
             }
         });*/
 
-        holder.Complete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               /* SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                switch (habitArray.get(position).getTxtCycleAndTimes().charAt(0)){
-                    case 'D':{
-                        Date currentDate = Calendar.getInstance().getTime();
-                        Date convertedDate = new Date();
-                        try {
-                            convertedDate = dateFormat.parse(habitArray.get(position).getCycleStartDate());
-                            if(convertedDate instanceof Date){
-                                System.out.println();
-                            }
-                        }
-                        catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-
-                        if(currentDate.after(convertedDate)){
-                            // TODO: 2018/5/28 SQL 清零
-                            // TODO: 2018/5/28 SQL 把currentDate放进数据库
-                        }
-
+        holder.Complete.setOnClickListener(view -> {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            TimeZone timeZone = TimeZone.getDefault();
+            System.out.println(timeZone);
+            Calendar currentDCalendar = Calendar.getInstance();
+            Calendar convertedCalendar = Calendar.getInstance();
+            currentDCalendar.setTimeZone(timeZone);
+            convertedCalendar.setTimeZone(timeZone);
+            switch (habitArray.get(position).getHabitCycle().charAt(0)){
+                case 'D':{
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeZone(timeZone);
+                    Date currentDate = calendar.getTime();
+                    Date convertedDate = new Date();
+                    try {
+                        convertedDate = dateFormat.parse(habitArray.get(position).getCycleStartDate());
                     }
-                    case 'W':
-                    case 'M':
-                    case 'Y':
-                    default:
-                }*/
+                    catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
+                    if(currentDate.after(convertedDate)){
+                        url = "http://api.a17-sd603.studev.groept.be/clear_timesdone/" + habitArray.get(position).getId();
+                        DBManager.callServer(url, context);
 
+                        url = "http://api.a17-sd603.studev.groept.be/set_cycle_start_date/"
+                                + dateFormat.format(Calendar.getInstance().getTime())
+                                + "/" + habitArray.get(position).getId();
+                        DBManager.callServer(url, context);
+                    }
 
+                    break;
+                }
+                case 'W':{
+                    Date convertedDate = new Date();
+                    try {
+                        convertedDate = dateFormat.parse(habitArray.get(position).getCycleStartDate());
+                        convertedCalendar.setTime(convertedDate);
+                    }
+                    catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
+                    if(daysBetween(currentDCalendar, convertedCalendar) > 7.0){
+                        url = "http://api.a17-sd603.studev.groept.be/clear_timesdone/" + habitArray.get(position).getId();
+                        DBManager.callServer(url, context);
 
+                        url = "http://api.a17-sd603.studev.groept.be/set_cycle_start_date/"
+                                + dateFormat.format(getTheLatestStartDay())
+                                + "/" + habitArray.get(position).getId();
+                        DBManager.callServer(url, context);
+                    }
 
+                    break;
+                }
+                case 'M':{
+                    Date convertedDate = new Date();
+                    try {
+                        convertedDate = dateFormat.parse(habitArray.get(position).getCycleStartDate());
+                        convertedCalendar.setTime(convertedDate);
+                    }
+                    catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
+                    if((currentDCalendar.get(Calendar.YEAR) > convertedCalendar.get(Calendar.YEAR))||
+                            ((currentDCalendar.get(Calendar.YEAR) == convertedCalendar.get(Calendar.YEAR))
+                            &&(currentDCalendar.get(Calendar.MONTH) > convertedCalendar.get(Calendar.MONTH)))){
+                        url = "http://api.a17-sd603.studev.groept.be/clear_timesdone/" + habitArray.get(position).getId();
+                        DBManager.callServer(url, context);
 
-
-
-
-
-
-
-
-
-
-
-                int newCoins = curCoins + Integer.parseInt(habitArray.get(position).getCoins());
-                curCoins = newCoins;
-
-                //add new coins from achieved
-                url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
-                DBManager.callServer(url, context);
-
-                Toast.makeText(view.getContext(), "Clicked on Achieved ", Toast.LENGTH_SHORT).show();
+                        url = "http://api.a17-sd603.studev.groept.be/set_cycle_start_date/"
+                                + dateFormat.format(Calendar.getInstance().getTime())
+                                + "/" + habitArray.get(position).getId();
+                        DBManager.callServer(url, context);
+                    }
+                    break;
+                }
+                default:{
+                    break;
+                }
             }
+
+            url = "http://api.a17-sd603.studev.groept.be/increase_timesdone/" + habitArray.get(position).getId();
+            DBManager.callServer(url, context);
+
+            int newCoins = curCoins + Integer.parseInt(habitArray.get(position).getCoins());
+            curCoins = newCoins;
+
+            //add new coins from achieved
+            url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
+            DBManager.callServer(url, context);
+
+            Toast.makeText(view.getContext(), "Clicked on Achieved ", Toast.LENGTH_SHORT).show();
+
+            holder.swipeLayout.close();
         });
 
-        holder.Edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.Delete.setOnClickListener(view -> {
+            url = "http://api.a17-sd603.studev.groept.be/change_habit_delete_status/" + habitArray.get(position).getId();
+            DBManager.callServer(url, context);
 
-                Toast.makeText(view.getContext(), "Clicked on Edit  ", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        holder.Delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                url = "http://api.a17-sd603.studev.groept.be/change_habit_delete_status/" + habitArray.get(position).getId();
-                DBManager.callServer(url, context);
-
-                mItemManger.removeShownLayouts(holder.swipeLayout);
-                habitArray.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, habitArray.size());
-                mItemManger.closeAllItems();
-                Toast.makeText(view.getContext(), "Deleted ", Toast.LENGTH_SHORT).show();
-            }
+            mItemManger.removeShownLayouts(holder.swipeLayout);
+            habitArray.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, habitArray.size());
+            mItemManger.closeAllItems();
+            Toast.makeText(view.getContext(), "Deleted ", Toast.LENGTH_SHORT).show();
         });
 
         //apply ViewHolder
         mItemManger.bindView(holder.itemView, position);
+    }
+
+    private Calendar getTheLatestStartDay() {
+        Calendar calendar = Calendar.getInstance();
+        url = "http://api.a17-sd603.studev.groept.be/get_first_day_of_week";
+        Consumer<String> consumer = this::getFirstDay;
+        DBManager.callServer(url, context, consumer);
+        if(firstDayOfWeek.equals("Monday")) {
+            calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        }
+        else{
+            calendar.setFirstDayOfWeek(Calendar.SUNDAY);
+        }
+        while(calendar.get(Calendar.DAY_OF_WEEK) != calendar.getFirstDayOfWeek()){
+            calendar.add(Calendar.DATE, -1);
+        }
+        return calendar;
+    }
+
+    private long daysBetween(Calendar currentDCalendar, Calendar convertedCalendar) {
+        long end = currentDCalendar.getTimeInMillis();
+        long start = convertedCalendar.getTimeInMillis();
+        return TimeUnit.MILLISECONDS.toDays(Math.abs(end - start));
     }
 
     @Override
@@ -199,9 +250,7 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
         TextView coinNumber;
 
         ImageButton Delete;
-        ImageButton Edit;
         ImageButton Complete;
-        //ImageButton btnLocation;
         HabitDataModel mHabit;
 
         ViewHolder(View view) {
@@ -213,9 +262,7 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
             CycleAndTimes = view.findViewById(R.id.deadline);
             coinNumber = view.findViewById(R.id.coinNumber);
             Delete = itemView.findViewById(R.id.Delete);
-            Edit = itemView.findViewById(R.id.Edit);
             Complete = itemView.findViewById(R.id.Complete);
-            //btnLocation = itemView.findViewById(R.id.btnLocation);
         }
     }
 
@@ -224,13 +271,28 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
         return R.id.swipe;
     }
 
-    public void getCurCoins(String response) {
+    private void getCurCoins(String response) {
         try{
             JSONArray jArr = new JSONArray(response);
             for(int i = 0; i < jArr.length(); i++){
                 JSONObject jObj = jArr.getJSONObject( i );
                 curCoins = jObj.getInt("Coins");
                 System.out.println(jObj.getInt("Coins"));
+            }
+        }
+        catch(JSONException e){
+            System.out.println(e);
+        }
+    }
+
+    private void getFirstDay(String response) {
+        try{
+            JSONArray jArr = new JSONArray(response);
+            for(int i = 0; i < jArr.length(); i++) {
+                JSONObject jObj = jArr.getJSONObject(i);
+                if (!jObj.getString("FirstDay").isEmpty()) {
+                    firstDayOfWeek = jObj.getString("FirstDay");
+                }
             }
         }
         catch(JSONException e){

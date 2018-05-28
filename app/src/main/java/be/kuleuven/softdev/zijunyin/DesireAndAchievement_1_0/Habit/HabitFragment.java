@@ -9,13 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.daimajia.swipe.util.Attributes;
 
 import org.json.JSONArray;
@@ -25,6 +18,7 @@ import org.json.JSONObject;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.function.Consumer;
@@ -77,6 +71,7 @@ public class HabitFragment extends Fragment {
 
     public void parseHabitData(String response) {
         try{
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             JSONArray jArr = new JSONArray(response);
             for(int i = 0; i < jArr.length(); i++){
                 JSONObject jObj = jArr.getJSONObject( i );
@@ -87,11 +82,12 @@ public class HabitFragment extends Fragment {
                 String curTimesDone = jObj.getString("TimesDone");
                 String curRewardCoins = jObj.getString("RewardCoins");
                 String curCycleStartDate = jObj.getString("CycleStartDate");
-                /*if(curCycleStartDate.isEmpty()) {
-                    curCycleStartDate = Calendar.getInstance().getTime();
-                }*/
+                if(curCycleStartDate.isEmpty()) {
+                    curCycleStartDate = dateFormat.format(Calendar.getInstance().getTime());
+                }
                     habitArray.add(
-                            new HabitDataModel(curHabitId, curHabitName, curHabitCycle + " " + curTimesDone + "/" + curTimesPerCycle, "+" + curRewardCoins, curCycleStartDate)
+                            new HabitDataModel(curHabitId, curHabitName, curHabitCycle, curTimesDone, curTimesPerCycle,
+                                    curRewardCoins, curCycleStartDate)
                     );
             }
             HabitAdapter habitAdapter = new HabitAdapter(getContext(), habitArray);

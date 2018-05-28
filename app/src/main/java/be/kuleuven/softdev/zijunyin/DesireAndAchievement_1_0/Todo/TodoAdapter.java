@@ -1,8 +1,6 @@
 package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,26 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
-import com.daimajia.swipe.util.Attributes;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
-import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DataModel;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
 import java.text.ParseException;
@@ -38,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
     private Context context;
@@ -86,9 +73,7 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
 
         //Create swipe menu
         holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
-        //dari kiri
         holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.bottom_wrapper1));
-        //dari kanan
         holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.bottom_wraper));
 
         //Create swipe listener
@@ -113,48 +98,36 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
         });
 
         //Set On Click Listener to menu elements
-        holder.Complete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //update current coins
-                int newCoins = curCoins + Integer.parseInt(todoArray.get(position).getCoins());
-                curCoins = newCoins;
+        holder.Complete.setOnClickListener(view -> {
+            //update current coins
+            int newCoins = curCoins + Integer.parseInt(todoArray.get(position).getCoins());
+            curCoins = newCoins;
 
-                //add new coins from achieved
-                url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
-                DBManager.callServer(url, context);
-                Toast.makeText(view.getContext(), "Clicked on Complete ", Toast.LENGTH_SHORT).show();
-            }
+            //add new coins from achieved
+            url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
+            DBManager.callServer(url, context);
+            Toast.makeText(view.getContext(), "Clicked on Complete ", Toast.LENGTH_SHORT).show();
+
+            holder.swipeLayout.close();
         });
 
-        holder.Edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.Delete.setOnClickListener(v -> {
+            url = "http://api.a17-sd603.studev.groept.be/change_todo_delete_status/" + todoArray.get(position).getId();
+            DBManager.callServer(url, context);
 
-                Toast.makeText(view.getContext(), "Clicked on Edit  ", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        holder.Delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                url = "http://api.a17-sd603.studev.groept.be/change_todo_delete_status/" + todoArray.get(position).getId();
-                DBManager.callServer(url, context);
-
-                mItemManger.removeShownLayouts(holder.swipeLayout);
-                todoArray.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, todoArray.size());
-                mItemManger.closeAllItems();
-                Toast.makeText(v.getContext(), "Deleted ", Toast.LENGTH_SHORT).show();
-            }
+            mItemManger.removeShownLayouts(holder.swipeLayout);
+            todoArray.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, todoArray.size());
+            mItemManger.closeAllItems();
+            Toast.makeText(v.getContext(), "Deleted ", Toast.LENGTH_SHORT).show();
         });
 
         //apply ViewHolder
         mItemManger.bindView(holder.itemView, position);
     }
 
-    public void getCurCoins(String response) {
+    private void getCurCoins(String response) {
         try{
             JSONArray jArr = new JSONArray(response);
             for(int i = 0; i < jArr.length(); i++){
@@ -174,7 +147,6 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        //public View mView;
         SwipeLayout swipeLayout;
 
         TextView todoName;
@@ -182,7 +154,6 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
         TextView coinNumber;
 
         ImageButton Delete;
-        ImageButton Edit;
         ImageButton Complete;
         TodoDataModel mTodo;
 
@@ -195,7 +166,6 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
             deadline = view.findViewById(R.id.deadline);
             coinNumber = view.findViewById(R.id.coinNumber);
             Delete = itemView.findViewById(R.id.Delete);
-            Edit = itemView.findViewById(R.id.Edit);
             Complete = itemView.findViewById(R.id.Complete);
         }
     }

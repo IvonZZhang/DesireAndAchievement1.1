@@ -4,15 +4,16 @@ import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DataModel;
 
 public class HabitDataModel extends DataModel {
 
-    private String txtCycleAndTimes;
+    private String habitCycle;
+    private String timesDone;
+    private String timesPerCycle;
     private String cycleStartDate;
 
-    public HabitDataModel() {
-    }
-
-    public HabitDataModel(int habitId, String txtHabitName, String txtCycleAndTimes, String txtCoinNumber, String cycleStartDate) {
+    public HabitDataModel(int habitId, String txtHabitName, String habitCycle, String timesDone, String timesPerCycle, String txtCoinNumber, String cycleStartDate) {
         super(habitId, txtHabitName, txtCoinNumber);
-        this.txtCycleAndTimes = txtCycleAndTimes;
+        this.habitCycle = habitCycle;
+        this.timesDone = timesDone;
+        this.timesPerCycle = timesPerCycle;
         this.cycleStartDate = cycleStartDate;
     }
 
@@ -20,7 +21,16 @@ public class HabitDataModel extends DataModel {
         return cycleStartDate;
     }
 
-    String getTxtCycleAndTimes() {
-        return txtCycleAndTimes;
+    public String getHabitCycle() {
+        return habitCycle;
     }
+
+    public String getTimesDone() {
+        return timesDone;
+    }
+
+    public String getTimesPerCycle() {
+        return timesPerCycle;
+    }
+
 }
