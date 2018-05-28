@@ -1,11 +1,15 @@
 package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 //import android.support.design.widget.FloatingActionButton;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -16,19 +20,38 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Adapter;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
+import com.ashokvarma.bottomnavigation.utils.Utils;
+import com.daimajia.swipe.util.Attributes;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.function.Consumer;
+
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.HabitAdapter;
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.HabitDataModel;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.HabitFragment;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.NewHabit;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Reward.NewReward;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Reward.RewardFragment;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo.NewTodo;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo.TodoFragment;
+
+import static be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R.id.current_coin_number;
+import static be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R.id.drawer_layout;
+import static be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R.id.nav_header_main;
 
 
 public class MainActivity extends AppCompatActivity
@@ -43,6 +66,15 @@ public class MainActivity extends AppCompatActivity
     private RewardFragment mRewardFragment;
     private FloatingActionsMenu fab;
     private int lastPosition;
+    private String[] languages = {"English", "Chinese"};
+    private String chosen_language;
+    private String[] pages = {"Habit","Todo","Reward"};
+    private String chosen_default_page;
+    private String[] weekdays = {"Monday","Sunday"};
+    private String chosen_first_day;
+    private TextView current_coin_number;
+    private String curCoinNumber;
+    private DrawerLayout drawer;
 
 
     @Override
@@ -52,18 +84,26 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        chosen_default_page = "Reward";
+        updateDefaultPage();
+        chosen_language = "English";
+
         fab = findViewById(R.id.multiple_actions);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        //add left hand drawer view
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
+        current_coin_number = headerView.findViewById(R.id.current_coin_number);
+        updateCoinNumber();
 
-        //添加底部导航栏
+        //add bottom navigation bar
         BottomNavigationBar bottomNavigationBar = findViewById(R.id.bottom_navigation_bar);
 
         BottomNavigationItem habititem = new BottomNavigationItem(R.drawable.ic_habit_off, "Habit");
@@ -75,20 +115,80 @@ public class MainActivity extends AppCompatActivity
                 .addItem(todoitem)
                 .addItem(rewarditem)
                 .initialise();
-
+        System.out.println(chosen_default_page);
         bottomNavigationBar.setTabSelectedListener(this);
         setDefaultFragment();
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        int chosen_default_page_int = Arrays.asList(pages).indexOf(chosen_default_page);
+        onTabSelectedRefresh(chosen_default_page_int);
+
+    }
+
+    @Override
+    // TODO: 2018/5/28 每次拉开抽屉数字都刷新
+    public boolean onPrepareOptionsMenu(Menu menu){
+        if (drawer != null && drawer.isDrawerOpen(nav_header_main)) {
+            updateCoinNumber();
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    public void updateCoinNumber(){
+        String url = "http://api.a17-sd603.studev.groept.be/get_coin_umber";
+        Consumer<String> consumer = this::parseCoinData;
+        DBManager.callServer(url,getBaseContext(),consumer);
+    }
+
+    public void parseCoinData(String response) {
+        try{
+            JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
+            JSONObject jObj = jArr.getJSONObject(0);
+            curCoinNumber = jObj.getString("Coins");
+            current_coin_number.setText(curCoinNumber);
+        }
+        catch (JSONException e) {
+            System.out.println(e);
+        }
+    }
+
+    public void updateDefaultPage(){
+        String url = "http://api.a17-sd603.studev.groept.be/get_default_page";
+        Consumer<String> consumer = this::parseDefaultPage;
+        DBManager.callServer(url,getBaseContext(),consumer);
+    }
+
+    public void parseDefaultPage(String response) {
+        try{
+            JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
+            JSONObject jObj = jArr.getJSONObject(0);
+            chosen_default_page = jObj.getString("DefaultPage");
+        }
+        catch (JSONException e) {
+            System.out.println(e);
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         fab.collapse();
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {}
+//        }, 100);
         onTabSelectedRefresh(0);
         onTabSelectedRefresh(1);
         onTabSelectedRefresh(2);
         onTabSelected(lastPosition);
     }
+
+
 
     @Override
     public void onBackPressed() {
@@ -98,30 +198,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-        fab.collapse();
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -133,21 +210,77 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, UserManual.class);
             startActivity(intent);
         }
-//        else if (id == R.id.nav_gallery) {
-//
-//        }
-//        else if (id == R.id.nav_slideshow) {
-//
-//        }
-//        else if (id == R.id.nav_manage) {
-//
-//        }
-//        else if (id == R.id.nav_share) {
-//
-//        }
-//        else if (id == R.id.nav_send) {
-//
-//        }
+        else if (id == R.id.nav_language) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Choose language")
+                    .setSingleChoiceItems(languages, 0,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    chosen_language = languages[which];
+                                }
+                            }
+                    )
+                    .setPositiveButton("OK",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Toast.makeText(getApplicationContext(), chosen_language,
+                                            Toast.LENGTH_LONG).show();
+                                    // TODO: 2018/5/28  这里写按下保存语言选择后的操作。使用已经存下选项的String chosen_language
+                                }
+                    })
+                    .show();
+        }
+        else if (id == R.id.nav_default_page) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Choose the default page")
+                    .setSingleChoiceItems(pages, 0,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    chosen_default_page = pages[which];
+                                }
+                            }
+                    )
+                    .setPositiveButton("OK",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Toast.makeText(getApplicationContext(), chosen_default_page,
+                                            Toast.LENGTH_LONG).show();
+                                    String url = "http://api.a17-sd603.studev.groept.be/set_default_page/" +
+                                            chosen_default_page;
+                                    DBManager.callServer(url, getBaseContext());
+                                }
+                    })
+                    .show();
+        }
+        else if (id == R.id.nav_first_weekday) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Choose the first day of week")
+                    .setSingleChoiceItems(weekdays, 0,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    chosen_first_day = weekdays[which];
+                                }
+                            }
+                    )
+                    .setPositiveButton("OK",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Toast.makeText(getApplicationContext(), chosen_first_day,
+                                            Toast.LENGTH_LONG).show();
+                                    String url = "http://api.a17-sd603.studev.groept.be/set_first_day/" +
+                                            chosen_first_day;
+                                    DBManager.callServer(url, getBaseContext());
+                                }
+                            })
+                    .show();
+        }
+        else if (id == R.id.nav_about) {
+            Intent intent = new Intent(this,About.class);
+            startActivity(intent);
+        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -160,9 +293,11 @@ public class MainActivity extends AppCompatActivity
     private void setDefaultFragment() {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
-        //mHabitFragment = HabitFragment.newInstance("习惯");
-        mHabitFragment = new HabitFragment();
-        transaction.replace(R.id.mainDisplay, mHabitFragment);
+
+                mHabitFragment = new HabitFragment();
+                transaction.replace(R.id.mainDisplay, mHabitFragment);
+
+
         transaction.commit();
     }
 
@@ -171,7 +306,7 @@ public class MainActivity extends AppCompatActivity
         lastPosition = position;
         Log.d(TAG, "onTabSelected() called with: " + "position = [" + position + "]");
         FragmentManager fm = this.getFragmentManager();
-        //开启事务
+        //open fragment
         FragmentTransaction transaction = fm.beginTransaction();
         switch (position) {
             case 0:
@@ -198,14 +333,14 @@ public class MainActivity extends AppCompatActivity
             default:
                 break;
         }
-        // 事务提交
+        // commit fragment
         transaction.commit();
     }
 
     public void onTabSelectedRefresh(int position) {
         Log.d(TAG, "onTabSelected() called with: " + "position = [" + position + "]");
         FragmentManager fm = this.getFragmentManager();
-        //开启事务
+        //open fragment
         FragmentTransaction transaction = fm.beginTransaction();
         switch (position) {
             case 0:
@@ -232,7 +367,7 @@ public class MainActivity extends AppCompatActivity
             default:
                 break;
         }
-        // 事务提交
+        // commit fragment
         transaction.commit();
     }
 

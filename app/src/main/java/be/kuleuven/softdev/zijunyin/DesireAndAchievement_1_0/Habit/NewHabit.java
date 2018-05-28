@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,7 +30,7 @@ import static java.security.AccessController.getContext;
 
 
 public class NewHabit extends AppCompatActivity {
-    String[] Cycles =  {"Daily","Weekly","Monthly","Yearly","None"};
+    String[] Cycles =  {"Daily","Weekly","Monthly","None"};
     String cycle;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,7 @@ public class NewHabit extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        cycle = "Daily";
     }
 
     @Override
@@ -59,24 +61,29 @@ public class NewHabit extends AppCompatActivity {
         int coins;
         int times;
 
-        EditText editText1 = findViewById(R.id.new_habit_name);
-        habit_name = editText1.getText().toString();
-        EditText editText2 = findViewById(R.id.habit_coin_number);
-        coins = Integer.parseInt(editText2.getText().toString());
-        EditText editText3 = findViewById(R.id.times_each_cycle);
-        times = Integer.parseInt(editText3.getText().toString());
+        try {
+            EditText editText1 = findViewById(R.id.new_habit_name);
+            habit_name = editText1.getText().toString();
+            EditText editText2 = findViewById(R.id.habit_coin_number);
+            coins = Integer.parseInt(editText2.getText().toString());
+            EditText editText3 = findViewById(R.id.times_each_cycle);
+            times = Integer.parseInt(editText3.getText().toString());
 
-        String url = "http://api.a17-sd603.studev.groept.be/add_habit/"+
-                habit_name+"/"+
-                cycle+"/"+
-                times+"/"+
-                "0"+"/"+
-                coins+"/"+
-                "0";
+            String url = "http://api.a17-sd603.studev.groept.be/add_habit/" +
+                    habit_name + "/" +
+                    cycle + "/" +
+                    times + "/" +
+                    "0" + "/" +
+                    coins + "/" +
+                    "0";
+            DBManager.callServer(url, getBaseContext());
+            finish();
+        }
+        catch (Exception e){
+            Toast.makeText(getApplicationContext(), "Please fill in all conditions!",
+                    Toast.LENGTH_LONG).show();
+        }
 
-        DBManager.callServer(url, getBaseContext());
-
-        finish();
     }
 
     public void chooseCycle(View view){

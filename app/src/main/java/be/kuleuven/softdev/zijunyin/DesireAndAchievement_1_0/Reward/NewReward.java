@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -70,18 +71,23 @@ public class NewReward extends AppCompatActivity{
         String reward_name;
         int coins;
 
-        EditText editText1 = findViewById(R.id.new_reward_name);
-        reward_name = editText1.getText().toString();
-        EditText editText2 =findViewById(R.id.reward_coin_number);
-        coins = Integer.parseInt(editText2.getText().toString());
+        try {
+            EditText editText1 = findViewById(R.id.new_reward_name);
+            reward_name = editText1.getText().toString();
+            EditText editText2 = findViewById(R.id.reward_coin_number);
+            coins = Integer.parseInt(editText2.getText().toString());
 
-        String url = "http://api.a17-sd603.studev.groept.be/add_reward/"+
-                reward_name + "/" +
-                coins + "/" +
-                isRepeated + "/" +
-                "0";
-        DBManager.callServer(url, getBaseContext());
-
-        finish();
+            String url = "http://api.a17-sd603.studev.groept.be/add_reward/" +
+                    reward_name + "/" +
+                    coins + "/" +
+                    isRepeated + "/" +
+                    "0";
+            DBManager.callServer(url, getBaseContext());
+            finish();
+        }
+        catch (Exception e){
+            Toast.makeText(getApplicationContext(), "Please fill in all conditions!",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 }

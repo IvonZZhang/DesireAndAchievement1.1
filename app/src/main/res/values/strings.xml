@@ -56,6 +56,11 @@
         \n-Call drawer for more actions.
     </string>
 
+    <string name="about_text">
+        This application is developed by Yifeng Zhang and Zijun Yin
+        \nDonate us if you like :)
+    </string>
+
     <string name="title_activity_habit">HabitActivity</string>
     <string name="cycle">CycleAndTimes</string>
     <string name="times">Times</string>

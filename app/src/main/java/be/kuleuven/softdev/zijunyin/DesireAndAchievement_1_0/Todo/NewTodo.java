@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,7 +31,6 @@ import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
 public class NewTodo extends AppCompatActivity{
     private TextView chosenDDL;
-    private TextView chosenParent;
     private String chosenDDL_string;
     //选择日期Dialog
     private DatePickerDialog datePickerDialog;
@@ -50,12 +50,9 @@ public class NewTodo extends AppCompatActivity{
         String date=sdf.format(new java.util.Date());
         chosenDDL = findViewById(R.id.choose_ddl);
         chosenDDL.setText(date);
+        chosenDDL_string = date;
 
         calendar = Calendar.getInstance();
-
-        chosenParent = findViewById(R.id.parent);
-        chosenParent.setText(R.string.none);
-
     }
 
     @Override
@@ -71,35 +68,27 @@ public class NewTodo extends AppCompatActivity{
         String todo_name;
         int coins;
 
+        try {
+            EditText editText1 = findViewById(R.id.new_todo_name);
+            todo_name = editText1.getText().toString();
+            EditText editText2 = (EditText) findViewById(R.id.todo_coin_number);
+            coins = Integer.parseInt(editText2.getText().toString());
 
-        EditText editText1 = findViewById(R.id.new_todo_name);
-        todo_name = editText1.getText().toString();
-        EditText editText2 =(EditText)findViewById(R.id.todo_coin_number);
-        coins = Integer.parseInt(editText2.getText().toString());
-
-
-        String url = "http://api.a17-sd603.studev.groept.be/add_todo/"+
-                todo_name + "/" +
-                chosenDDL_string + "/" +
-                coins + "/" +
-                "0";
-        DBManager.callServer(url, getBaseContext());
-
-        finish();
-    }
-
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.ddl_layout:
-                showDialog();
-                break;
-            case R.id.choose_parent:
-                chooseParent();
-                break;
+            String url = "http://api.a17-sd603.studev.groept.be/add_todo/" +
+                    todo_name + "/" +
+                    chosenDDL_string + "/" +
+                    coins + "/" +
+                    "0";
+            DBManager.callServer(url, getBaseContext());
+            finish();
+        }
+        catch (Exception e){
+            Toast.makeText(getApplicationContext(), "Please fill in all conditions!",
+                    Toast.LENGTH_LONG).show();
         }
     }
 
-    private void showDialog() {
+    public void showDialog(View view) {
         new DatePickerDialog(
                 this,
                 // set listener
@@ -115,39 +104,6 @@ public class NewTodo extends AppCompatActivity{
                 , calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
         )
                 .show();
-
-//                this, new DatePickerDialog.OnDateSetListener() {
-//            @Override
-//            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-//                //monthOfYear 得到的月份会减1所以我们要加1
-//                String time = String.valueOf(year) + "　"
-//                            + String.valueOf(monthOfYear + 1) + "  "
-//                            + Integer.toString(dayOfMonth);
-//                Log.d("Test", time);
-//            }
-//        },
-//                calendar.get(Calendar.YEAR),
-//                calendar.get(Calendar.MONTH),
-//                calendar.get(Calendar.DAY_OF_MONTH)
-
-//        datePickerDialog.show();
-//        //自动弹出键盘问题解决
-//        datePickerDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
-
-    public void chooseParent(){
-        new AlertDialog.Builder(this)
-                .setTitle("Choose todo parent")
-                .setSingleChoiceItems(new String[] {"程序逻辑寻找现有todo列表"}, 0,
-                        new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int which) {
-//                                dialog.dismiss();
-                            }
-                        }
-                )
-                .setPositiveButton("Save", null)
-                .show();
-    }
 }
