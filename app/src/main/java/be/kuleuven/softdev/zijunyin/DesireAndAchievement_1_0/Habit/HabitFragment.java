@@ -26,6 +26,7 @@ import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.function.Consumer;
 
 public class HabitFragment extends Fragment {
@@ -76,7 +77,7 @@ public class HabitFragment extends Fragment {
 
     public void parseHabitData(String response) {
         try{
-            JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
+            JSONArray jArr = new JSONArray(response);
             for(int i = 0; i < jArr.length(); i++){
                 JSONObject jObj = jArr.getJSONObject( i );
                 int curHabitId = jObj.getInt("idHabit");
@@ -85,11 +86,13 @@ public class HabitFragment extends Fragment {
                 String curTimesPerCycle = jObj.getString("TimesPerCycle");
                 String curTimesDone = jObj.getString("TimesDone");
                 String curRewardCoins = jObj.getString("RewardCoins");
-                if(jObj.getInt("isDeleted") == 0){
+                String curCycleStartDate = jObj.getString("CycleStartDate");
+                /*if(curCycleStartDate.isEmpty()) {
+                    curCycleStartDate = Calendar.getInstance().getTime();
+                }*/
                     habitArray.add(
-                            new HabitDataModel(curHabitId, curHabitName, curHabitCycle + " " + curTimesDone + "/" + curTimesPerCycle, "+" + curRewardCoins)
+                            new HabitDataModel(curHabitId, curHabitName, curHabitCycle + " " + curTimesDone + "/" + curTimesPerCycle, "+" + curRewardCoins, curCycleStartDate)
                     );
-                }
             }
             HabitAdapter habitAdapter = new HabitAdapter(getContext(), habitArray);
             habitAdapter.setMode(Attributes.Mode.Single);

@@ -37,15 +37,22 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
     private Context context;
     private ArrayList<TodoDataModel> todoArray;
     private String url;
+    private int curCoins;
 
     public TodoAdapter(@NonNull Context context, ArrayList<TodoDataModel> todoArray) {
         this.context = context;
         this.todoArray = todoArray;
+        curCoins = 0;
+        Consumer<String> consumer = this::getCurCoins;
+        url = "http://api.a17-sd603.studev.groept.be/get_coins";
+        DBManager.callServer(url, context, consumer);
     }
 
     @Override
@@ -109,6 +116,13 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
         holder.Complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //update current coins
+                int newCoins = curCoins + Integer.parseInt(todoArray.get(position).getCoins());
+                curCoins = newCoins;
+
+                //add new coins from achieved
+                url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
+                DBManager.callServer(url, context);
                 Toast.makeText(view.getContext(), "Clicked on Complete ", Toast.LENGTH_SHORT).show();
             }
         });
@@ -138,6 +152,20 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
 
         //apply ViewHolder
         mItemManger.bindView(holder.itemView, position);
+    }
+
+    public void getCurCoins(String response) {
+        try{
+            JSONArray jArr = new JSONArray(response);
+            for(int i = 0; i < jArr.length(); i++){
+                JSONObject jObj = jArr.getJSONObject( i );
+                curCoins = jObj.getInt("Coins");
+                System.out.println(jObj.getInt("Coins"));
+            }
+        }
+        catch(JSONException e){
+            System.out.println(e);
+        }
     }
 
     @Override

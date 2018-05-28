@@ -20,19 +20,30 @@ import com.android.volley.toolbox.Volley;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Reward.RewardDataModel;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder>{
     private Context context;
     private ArrayList<RewardDataModel> rewardArray;
+    private int curCoins;
+    private String url;
 
     public RewardAdapter(@NonNull Context context, ArrayList<RewardDataModel> rewardArray) {
         this.context = context;
         this.rewardArray = rewardArray;
+        curCoins = 0;
+        Consumer<String> consumer = this::getCurCoins;
+        url = "http://api.a17-sd603.studev.groept.be/get_coins";
+        DBManager.callServer(url, context, consumer);
     }
 
     @Override
@@ -90,7 +101,12 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
         holder.Complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int newCoins = curCoins + Integer.parseInt(rewardArray.get(position).getCoins());
+                curCoins = newCoins;
 
+                //add new coins from achieved
+                url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
+                DBManager.callServer(url, context);
                 Toast.makeText(view.getContext(), "Clicked on Complete ", Toast.LENGTH_SHORT).show();
             }
         });
@@ -159,4 +175,19 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
     public int getSwipeLayoutResourceId(int position) {
         return R.id.swipe;
     }
+
+    public void getCurCoins(String response) {
+        try{
+            JSONArray jArr = new JSONArray(response);
+            for(int i = 0; i < jArr.length(); i++){
+                JSONObject jObj = jArr.getJSONObject( i );
+                curCoins = jObj.getInt("Coins");
+                System.out.println(jObj.getInt("Coins"));
+            }
+        }
+        catch(JSONException e){
+            System.out.println(e);
+        }
+    }
+
 }

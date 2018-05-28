@@ -61,9 +61,9 @@ public class NewHabit extends AppCompatActivity {
 
         EditText editText1 = findViewById(R.id.new_habit_name);
         habit_name = editText1.getText().toString();
-        EditText editText2 =(EditText)findViewById(R.id.habit_coin_number);
+        EditText editText2 = findViewById(R.id.habit_coin_number);
         coins = Integer.parseInt(editText2.getText().toString());
-        EditText editText3 =(EditText)findViewById(R.id.times_each_cycle);
+        EditText editText3 = findViewById(R.id.times_each_cycle);
         times = Integer.parseInt(editText3.getText().toString());
 
         String url = "http://api.a17-sd603.studev.groept.be/add_habit/"+

@@ -19,19 +19,34 @@ import com.android.volley.toolbox.Volley;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.function.Consumer;
 
 public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> {
 
     private Context context;
     private ArrayList<HabitDataModel> habitArray;
+    private int curCoins;
+    private String url;
 
     public HabitAdapter(@NonNull Context context, ArrayList<HabitDataModel> habitArray) {
         this.context = context;
         this.habitArray = habitArray;
+        curCoins = 0;
+        Consumer<String> consumer = this::getCurCoins;
+        url = "http://api.a17-sd603.studev.groept.be/get_coins";
+        DBManager.callServer(url, context, consumer);
     }
 
     @Override
@@ -88,6 +103,56 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
         holder.Complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+               /* SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                switch (habitArray.get(position).getTxtCycleAndTimes().charAt(0)){
+                    case 'D':{
+                        Date currentDate = Calendar.getInstance().getTime();
+                        Date convertedDate = new Date();
+                        try {
+                            convertedDate = dateFormat.parse(habitArray.get(position).getCycleStartDate());
+                            if(convertedDate instanceof Date){
+                                System.out.println();
+                            }
+                        }
+                        catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        if(currentDate.after(convertedDate)){
+                            // TODO: 2018/5/28 SQL 清零
+                            // TODO: 2018/5/28 SQL 把currentDate放进数据库
+                        }
+
+                    }
+                    case 'W':
+                    case 'M':
+                    case 'Y':
+                    default:
+                }*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                int newCoins = curCoins + Integer.parseInt(habitArray.get(position).getCoins());
+                curCoins = newCoins;
+
+                //add new coins from achieved
+                url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
+                DBManager.callServer(url, context);
 
                 Toast.makeText(view.getContext(), "Clicked on Achieved ", Toast.LENGTH_SHORT).show();
             }
@@ -104,7 +169,7 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
         holder.Delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "http://api.a17-sd603.studev.groept.be/change_habit_delete_status/" + habitArray.get(position).getId();
+                url = "http://api.a17-sd603.studev.groept.be/change_habit_delete_status/" + habitArray.get(position).getId();
                 DBManager.callServer(url, context);
 
                 mItemManger.removeShownLayouts(holder.swipeLayout);
@@ -157,5 +222,19 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
     @Override
     public int getSwipeLayoutResourceId(int position) {
         return R.id.swipe;
+    }
+
+    public void getCurCoins(String response) {
+        try{
+            JSONArray jArr = new JSONArray(response);
+            for(int i = 0; i < jArr.length(); i++){
+                JSONObject jObj = jArr.getJSONObject( i );
+                curCoins = jObj.getInt("Coins");
+                System.out.println(jObj.getInt("Coins"));
+            }
+        }
+        catch(JSONException e){
+            System.out.println(e);
+        }
     }
 }
