@@ -33,6 +33,10 @@
             android:name="be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Reward.NewReward"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name="be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.UserManual"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

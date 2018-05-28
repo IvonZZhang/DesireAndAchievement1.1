@@ -43,6 +43,19 @@
     <string name="first_weekday">The first weekday</string>
     <string name="about">About</string>
 
+    <string name="user_manual_text_info">
+        This application is going to let you do better self-management.
+        \nWin coins by finish habit task or todo. Use coins to self reward.
+    </string>
+    <string name="user_manual_label_1">
+        GUIDE
+    </string>
+    <string name="user_manual_text_guide">
+        -Swipe right to finish a mission.
+        \n-Click + to create a habit, todo or reward.
+        \n-Call drawer for more actions.
+    </string>
+
     <string name="title_activity_habit">HabitActivity</string>
     <string name="cycle">CycleAndTimes</string>
     <string name="times">Times</string>

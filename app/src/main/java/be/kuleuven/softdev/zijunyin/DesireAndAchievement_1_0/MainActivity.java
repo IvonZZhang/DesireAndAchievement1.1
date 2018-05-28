@@ -84,6 +84,9 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         fab.collapse();
+        onTabSelectedRefresh(0);
+        onTabSelectedRefresh(1);
+        onTabSelectedRefresh(2);
         onTabSelected(lastPosition);
     }
 
@@ -98,27 +101,27 @@ public class MainActivity extends AppCompatActivity
         fab.collapse();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -126,17 +129,23 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-//        if (id == R.id.nav_camera) {
-//            // Handle the camera action
-//        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_user_manual) {
+            Intent intent = new Intent(this, UserManual.class);
+            startActivity(intent);
+        }
+//        else if (id == R.id.nav_gallery) {
 //
-//        } else if (id == R.id.nav_slideshow) {
+//        }
+//        else if (id == R.id.nav_slideshow) {
 //
-//        } else if (id == R.id.nav_manage) {
+//        }
+//        else if (id == R.id.nav_manage) {
 //
-//        } else if (id == R.id.nav_share) {
+//        }
+//        else if (id == R.id.nav_share) {
 //
-//        } else if (id == R.id.nav_send) {
+//        }
+//        else if (id == R.id.nav_send) {
 //
 //        }
 
@@ -146,7 +155,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * 设置默认的
+     * set default fragment
      */
     private void setDefaultFragment() {
         FragmentManager fm = getFragmentManager();
@@ -160,6 +169,40 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onTabSelected(int position) {
         lastPosition = position;
+        Log.d(TAG, "onTabSelected() called with: " + "position = [" + position + "]");
+        FragmentManager fm = this.getFragmentManager();
+        //开启事务
+        FragmentTransaction transaction = fm.beginTransaction();
+        switch (position) {
+            case 0:
+                if (mHabitFragment == null) {
+                    //mHabitFragment = HabitFragment.newInstance();
+                    mHabitFragment = new HabitFragment();
+                }
+                transaction.replace(R.id.mainDisplay, mHabitFragment);
+                break;
+            case 1:
+                if (mTodoFragment == null) {
+                    //mTodoFragment = TodoFragment.newInstance("待办");
+                    mTodoFragment = new TodoFragment();
+                }
+                transaction.replace(R.id.mainDisplay, mTodoFragment);
+                break;
+            case 2:
+                if (mRewardFragment == null) {
+                    //mRewardFragment = RewardFragment.newInstance("奖励");
+                    mRewardFragment = new RewardFragment();
+                }
+                transaction.replace(R.id.mainDisplay, mRewardFragment);
+                break;
+            default:
+                break;
+        }
+        // 事务提交
+        transaction.commit();
+    }
+
+    public void onTabSelectedRefresh(int position) {
         Log.d(TAG, "onTabSelected() called with: " + "position = [" + position + "]");
         FragmentManager fm = this.getFragmentManager();
         //开启事务
