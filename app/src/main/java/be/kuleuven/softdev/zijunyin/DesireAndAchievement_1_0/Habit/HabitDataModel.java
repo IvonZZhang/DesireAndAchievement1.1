@@ -9,12 +9,9 @@ public class HabitDataModel extends DataModel {
     public HabitDataModel() {
     }
 
-    public HabitDataModel(String txtHabitName, String txtCycleAndTimes, String txtCoinNumber) {
-        super();
-        this.name = txtHabitName;
+    public HabitDataModel(int habitId, String txtHabitName, String txtCycleAndTimes, String txtCoinNumber) {
+        super(habitId, txtHabitName, txtCoinNumber);
         this.txtCycleAndTimes = txtCycleAndTimes;
-        //this.txtTimes = txtTimes;
-        this.coins = txtCoinNumber;
     }
 
     String getTxtCycleAndTimes() {

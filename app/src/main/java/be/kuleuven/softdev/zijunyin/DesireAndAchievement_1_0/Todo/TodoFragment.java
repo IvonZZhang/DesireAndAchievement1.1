@@ -22,9 +22,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class TodoFragment extends Fragment {
 
@@ -46,41 +48,8 @@ public class TodoFragment extends Fragment {
         todoArray = new ArrayList<>();
 
         String url ="http://api.a17-sd603.studev.groept.be/testTodo";
-
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try{
-                            JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
-                            for(int i = 0; i < jArr.length(); i++){
-                                JSONObject jObj = jArr.getJSONObject( i );
-                                String curTodoName = jObj.getString("TodoName");
-                                String curDDL = jObj.getString("Deadline");
-                                String curRewardCoins = jObj.getString("RewardCoins");
-                                //String curIsDeleted = jObj.getString("isDeleted");
-                                if(jObj.getInt("isDeleted") == 0){
-                                    todoArray.add(
-                                            new TodoDataModel(curTodoName, curDDL, curRewardCoins)
-                                    );
-                                }
-                            }
-                            TodoAdapter habitAdapter = new TodoAdapter(getContext(), todoArray);
-                            habitAdapter.setMode(Attributes.Mode.Single);
-                            todoList.setAdapter(habitAdapter);
-                        }
-                        catch (JSONException e) {
-                            System.out.println(e);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("failed to work");
-            }
-        });
-        queue.add(stringRequest);
+        Consumer<String> consumer = this::parseTodoData;
+        DBManager.callServer(url, getContext(), consumer);
 
         /*if(todoArray.isEmpty()){
             todoList.setVisibility(View.GONE);
@@ -102,6 +71,31 @@ public class TodoFragment extends Fragment {
         });
 
         return view;
+    }
+
+    public void parseTodoData(String response) {
+        try{
+            JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
+            for(int i = 0; i < jArr.length(); i++){
+                JSONObject jObj = jArr.getJSONObject( i );
+                int curTodoId = jObj.getInt("idTodo");
+                String curTodoName = jObj.getString("TodoName");
+                String curDDL = jObj.getString("Deadline");
+                String curRewardCoins = jObj.getString("RewardCoins");
+                //String curIsDeleted = jObj.getString("isDeleted");
+                if(jObj.getInt("isDeleted") == 0){
+                    todoArray.add(
+                            new TodoDataModel(curTodoId, curTodoName, curDDL, curRewardCoins)
+                    );
+                }
+            }
+            TodoAdapter habitAdapter = new TodoAdapter(getContext(), todoArray);
+            habitAdapter.setMode(Attributes.Mode.Single);
+            todoList.setAdapter(habitAdapter);
+        }
+        catch (JSONException e) {
+            System.out.println(e);
+        }
     }
 
 }

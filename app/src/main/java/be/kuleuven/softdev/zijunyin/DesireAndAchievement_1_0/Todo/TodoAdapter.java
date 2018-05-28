@@ -28,6 +28,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DataModel;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
 import java.text.ParseException;
@@ -39,6 +41,7 @@ import java.util.Date;
 public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
     private Context context;
     private ArrayList<TodoDataModel> todoArray;
+    private String url;
 
     public TodoAdapter(@NonNull Context context, ArrayList<TodoDataModel> todoArray) {
         this.context = context;
@@ -106,7 +109,6 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
         holder.Complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Toast.makeText(view.getContext(), "Clicked on Complete ", Toast.LENGTH_SHORT).show();
             }
         });
@@ -122,21 +124,8 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
         holder.Delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://api.a17-sd603.studev.groept.be/change_todo_delete_status/" + todoArray.get(position).getName();
-                System.out.println(todoArray.get(position).getName());
-
-                RequestQueue queue = Volley.newRequestQueue(context);
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {}
-                        }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        System.out.println("failed to work");
-                    }
-                });
-                queue.add(stringRequest);
+                url = "http://api.a17-sd603.studev.groept.be/change_todo_delete_status/" + todoArray.get(position).getId();
+                DBManager.callServer(url, context);
 
                 mItemManger.removeShownLayouts(holder.swipeLayout);
                 todoArray.remove(position);

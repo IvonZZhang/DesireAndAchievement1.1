@@ -21,6 +21,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
 import static java.security.AccessController.getContext;
@@ -72,18 +74,7 @@ public class NewHabit extends AppCompatActivity {
                 coins+"/"+
                 "0";
 
-        RequestQueue queue = Volley.newRequestQueue(getBaseContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {}
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("failed to work");
-            }
-        });
-        queue.add(stringRequest);
+        DBManager.callServer(url, getBaseContext());
 
         finish();
     }

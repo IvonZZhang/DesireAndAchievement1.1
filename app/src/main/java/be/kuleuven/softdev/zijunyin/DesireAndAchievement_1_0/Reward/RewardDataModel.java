@@ -8,12 +8,9 @@ public class RewardDataModel extends DataModel{
     public RewardDataModel() {
     }
 
-    public RewardDataModel(String txtRewardName, String isRepeated, String txtCoinNumber) {
-        super();
-        this.name = txtRewardName;
+    public RewardDataModel(int rewardId, String txtRewardName, String isRepeated, String txtCoinNumber) {
+        super(rewardId, txtRewardName, txtCoinNumber);
         this.isRepeated = isRepeated;
-        //this.txtTimes = txtTimes;
-        this.coins = txtCoinNumber;
     }
 
     String isRepeated() {

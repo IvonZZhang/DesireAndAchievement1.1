@@ -9,12 +9,9 @@ public class TodoDataModel extends DataModel {
     public TodoDataModel() {
     }
 
-    public TodoDataModel(String todoName, String todoDDL, String rewardCoins) {
-        super();
-        this.name = todoName;
+    public TodoDataModel(int todoId, String todoName, String todoDDL, String rewardCoins) {
+        super(todoId, todoName, rewardCoins);
         this.todoDDL = todoDDL;
-        this.coins = rewardCoins;
-        //this.isDeleted = isDeleted;
     }
 
     //public boolean isDeleted() {

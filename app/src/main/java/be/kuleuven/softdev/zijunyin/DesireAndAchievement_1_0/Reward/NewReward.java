@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
 public class NewReward extends AppCompatActivity{
@@ -71,7 +72,7 @@ public class NewReward extends AppCompatActivity{
 
         EditText editText1 = findViewById(R.id.new_reward_name);
         reward_name = editText1.getText().toString();
-        EditText editText2 =(EditText)findViewById(R.id.reward_coin_number);
+        EditText editText2 =findViewById(R.id.reward_coin_number);
         coins = Integer.parseInt(editText2.getText().toString());
 
         String url = "http://api.a17-sd603.studev.groept.be/add_reward/"+
@@ -79,30 +80,7 @@ public class NewReward extends AppCompatActivity{
                 coins + "/" +
                 isRepeated + "/" +
                 "0";
-        RequestQueue queue = Volley.newRequestQueue(getBaseContext());
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        //mTextView.setText("Response is: "+ response.substring(0,500));
-                        System.out.println(response);
-
-                        //parse JSON to String
-                        //String result = "";
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //mTextView.setText("That didn't work!");
-                System.out.println("failed to work");
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
+        DBManager.callServer(url, getBaseContext());
 
         finish();
     }
