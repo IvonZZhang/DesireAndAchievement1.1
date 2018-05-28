@@ -65,9 +65,7 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
 
         //Create swipe menu
         holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
-        //dari kiri
         holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.bottom_wrapper1));
-        //dari kanan
         holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.bottom_wraper));
 
         //Create swipe listener

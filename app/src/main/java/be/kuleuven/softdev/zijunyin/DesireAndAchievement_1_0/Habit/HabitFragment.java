@@ -1,5 +1,6 @@
 package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +32,14 @@ public class HabitFragment extends Fragment {
     public HabitFragment() {
     }
 
+    public static HabitFragment newInstance(){
+        HabitFragment habitFragment = new HabitFragment();
+        return habitFragment;
+    }
+
+    public HabitFragment getInstance(){
+        return this;
+    }
 /*TODO: refresh the list every time it has changed*/
 
     @Override

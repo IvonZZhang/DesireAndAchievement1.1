@@ -30,27 +30,21 @@ public class NewReward extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_reward);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.new_reward_toolbar);
+        Toolbar toolbar = findViewById(R.id.new_reward_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        is_repeated_switch = (Switch)findViewById(R.id.is_repeated_switch);
+        is_repeated_switch = findViewById(R.id.is_repeated_switch);
 
-//        final SharedPreferences sharedPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
-//        final SharedPreferences.Editor editor = sharedPreferences.edit();
-//        is_repeated_switch.setChecked(sharedPreferences.getBoolean("your_key", true)); //true default
-
-        is_repeated_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                {
-                    isRepeated = 1;
-                }
-                else
-                {
-                    isRepeated = 0;
-                }
+        is_repeated_switch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked)
+            {
+                isRepeated = 1;
+            }
+            else
+            {
+                isRepeated = 0;
             }
         });
 
@@ -59,7 +53,6 @@ public class NewReward extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        //监听左上角的返回箭头
         if(item.getItemId()==android.R.id.home){
             finish();
             return true;

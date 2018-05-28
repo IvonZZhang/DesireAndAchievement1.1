@@ -8,8 +8,6 @@ import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-//import android.support.design.widget.FloatingActionButton;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -20,28 +18,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Adapter;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
-import com.ashokvarma.bottomnavigation.utils.Utils;
-import com.daimajia.swipe.util.Attributes;
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.function.Consumer;
 
-import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.HabitAdapter;
-import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.HabitDataModel;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.HabitFragment;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.NewHabit;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Reward.NewReward;
@@ -49,8 +39,6 @@ import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Reward.RewardFragme
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo.NewTodo;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo.TodoFragment;
 
-import static be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R.id.current_coin_number;
-import static be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R.id.drawer_layout;
 import static be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R.id.nav_header_main;
 
 
@@ -86,6 +74,7 @@ public class MainActivity extends AppCompatActivity
 
         chosen_default_page = "Reward";
         updateDefaultPage();
+        System.out.println(chosen_default_page);
         chosen_language = "English";
 
         fab = findViewById(R.id.multiple_actions);
@@ -121,14 +110,14 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        int chosen_default_page_int = Arrays.asList(pages).indexOf(chosen_default_page);
-        onTabSelectedRefresh(chosen_default_page_int);
-
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//
+//        int chosen_default_page_int = Arrays.asList(pages).indexOf(chosen_default_page);
+//        onTabSelectedRefresh(chosen_default_page_int);
+//
+//    }
 
     @Override
     // TODO: 2018/5/28 每次拉开抽屉数字都刷新
@@ -159,8 +148,11 @@ public class MainActivity extends AppCompatActivity
 
     public void updateDefaultPage(){
         String url = "http://api.a17-sd603.studev.groept.be/get_default_page";
+        System.out.println(chosen_default_page+"222");
         Consumer<String> consumer = this::parseDefaultPage;
+        System.out.println(chosen_default_page+"111");
         DBManager.callServer(url,getBaseContext(),consumer);
+        System.out.println(chosen_default_page);
     }
 
     public void parseDefaultPage(String response) {
@@ -168,6 +160,7 @@ public class MainActivity extends AppCompatActivity
             JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
             JSONObject jObj = jArr.getJSONObject(0);
             chosen_default_page = jObj.getString("DefaultPage");
+            System.out.println(chosen_default_page + "han shu li");
         }
         catch (JSONException e) {
             System.out.println(e);
@@ -178,10 +171,6 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         fab.collapse();
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {}
-//        }, 100);
         onTabSelectedRefresh(0);
         onTabSelectedRefresh(1);
         onTabSelectedRefresh(2);
@@ -314,6 +303,9 @@ public class MainActivity extends AppCompatActivity
                     //mHabitFragment = HabitFragment.newInstance();
                     mHabitFragment = new HabitFragment();
                 }
+                else{
+                    mHabitFragment.getInstance();
+                }
                 transaction.replace(R.id.mainDisplay, mHabitFragment);
                 break;
             case 1:
@@ -344,10 +336,10 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction transaction = fm.beginTransaction();
         switch (position) {
             case 0:
-                if (mHabitFragment == null) {
+                //if (mHabitFragment == null) {
                     //mHabitFragment = HabitFragment.newInstance();
                     mHabitFragment = new HabitFragment();
-                }
+                //}
                 transaction.replace(R.id.mainDisplay, mHabitFragment);
                 break;
             case 1:
