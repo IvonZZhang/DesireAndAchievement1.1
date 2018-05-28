@@ -22,7 +22,7 @@ import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
 public class NewReward extends AppCompatActivity{
     private Switch is_repeated_switch;
-    private int isRepeated;
+    private int isRepeated = 0 ;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
