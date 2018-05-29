@@ -122,24 +122,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//
-//        int chosen_default_page_int = Arrays.asList(pages).indexOf(chosen_default_page);
-//        onTabSelectedRefresh(chosen_default_page_int);
-//
-//    }
-
-    @Override
-    // TODO: 2018/5/28 每次拉开抽屉数字都刷新
-    public boolean onPrepareOptionsMenu(Menu menu){
-        if (drawer != null && drawer.isDrawerOpen(nav_header_main)) {
-            updateCoinNumber();
-        }
-        return super.onPrepareOptionsMenu(menu);
-    }
-
     public void updateCoinNumber(){
         String url = "http://api.a17-sd603.studev.groept.be/get_coin_umber";
         Consumer<String> consumer = this::parseCoinData;
@@ -228,29 +210,29 @@ public class MainActivity extends AppCompatActivity
                     })
                     .show();
         }
-        else if (id == R.id.nav_default_page) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Choose the default page")
-                    .setSingleChoiceItems(pages, 0,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    chosen_default_page = pages[which];
-                                }
-                            }
-                    )
-                    .setPositiveButton("OK",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Toast.makeText(getApplicationContext(), chosen_default_page,
-                                            Toast.LENGTH_LONG).show();
-                                    String url = "http://api.a17-sd603.studev.groept.be/set_default_page/" +
-                                            chosen_default_page;
-                                    DBManager.callServer(url, getBaseContext());
-                                }
-                    })
-                    .show();
-        }
+//        else if (id == R.id.nav_default_page) {
+//            new AlertDialog.Builder(this)
+//                    .setTitle("Choose the default page")
+//                    .setSingleChoiceItems(pages, 0,
+//                            new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    chosen_default_page = pages[which];
+//                                }
+//                            }
+//                    )
+//                    .setPositiveButton("OK",
+//                            new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    Toast.makeText(getApplicationContext(), chosen_default_page,
+//                                            Toast.LENGTH_LONG).show();
+//                                    String url = "http://api.a17-sd603.studev.groept.be/set_default_page/" +
+//                                            chosen_default_page;
+//                                    DBManager.callServer(url, getBaseContext());
+//                                }
+//                    })
+//                    .show();
+//        }
         else if (id == R.id.nav_first_weekday) {
             new AlertDialog.Builder(this)
                     .setTitle("Choose the first day of week")

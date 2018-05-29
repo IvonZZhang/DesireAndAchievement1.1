@@ -29,16 +29,19 @@ public class HabitFragment extends Fragment {
     private RecyclerView habitList;
     private ArrayList<HabitDataModel> habitArray;
 
+    public HabitFragment() {
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        String url ="http://api.a17-sd603.studev.groept.be/testHabit";
 
+        String url_space = "http://api.a17-sd603.studev.groept.be/habit_convert_space";
+        DBManager.callServer(url_space, getContext());
+
+        String url ="http://api.a17-sd603.studev.groept.be/testHabit";
         Consumer<String> consumer = this::parseHabitData;
         DBManager.callServer(url, getContext(), consumer);
-    }
-
-    public HabitFragment() {
     }
 
     public static HabitFragment newInstance(){

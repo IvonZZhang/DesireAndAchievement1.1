@@ -37,6 +37,10 @@ public class RewardFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
+
+        String url_space = "http://api.a17-sd603.studev.groept.be/reward_convert_space";
+        DBManager.callServer(url_space, getContext());
+
         String url ="http://api.a17-sd603.studev.groept.be/testReward";
         Consumer<String> consumer = this::parseRewardData;
         DBManager.callServer(url, getContext(), consumer);

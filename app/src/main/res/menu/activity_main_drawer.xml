@@ -13,10 +13,6 @@
             android:icon="@drawable/ic_language"
             android:title="@string/language" />
         <item
-            android:id="@+id/nav_default_page"
-            android:icon="@drawable/ic_default_page"
-            android:title="@string/default_page" />
-        <item
             android:id="@+id/nav_first_weekday"
             android:icon="@drawable/ic_first_weekday"
             android:title="@string/first_weekday" />

@@ -43,11 +43,13 @@ public class TodoFragment extends Fragment {
     public TodoFragment() {
     }
 
-/*TODO: refresh the list every time it has changed*/
-
     @Override
     public void onResume() {
         super.onResume();
+
+        String url_space = "http://api.a17-sd603.studev.groept.be/todo_convert_space";
+        DBManager.callServer(url_space, getContext());
+
         String url ="http://api.a17-sd603.studev.groept.be/testTodo";
         Consumer<String> consumer = this::parseTodoData;
         DBManager.callServer(url, getContext(), consumer);
