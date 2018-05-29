@@ -2,13 +2,17 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="green">#3dc31e</color>
-    <color name="greenlight">#a4db97</color>
+    <color name="colorAccent">#ff7575</color>
+
+    <color name="greenDark">#009100</color>
+    <color name="green">#00BB00</color>
+    <color name="greenLight">#CEFFCE</color>
+    <color name="orangeDark">#EA7500</color>
     <color name="orange">#ff8c2c</color>
-    <color name="orangelight">#ffd7b5</color>
-    <color name="blue">#4345db</color>
-    <color name="bluelight">#b8b9e3</color>
+    <color name="orangeLight">#FFE4CA</color>
+    <color name="blueDark">#0066CC</color>
+    <color name="blue">#0080FF</color>
+    <color name="blueLight">#C4E1FF</color>
     <color name="hololight">#26f3f3f3</color>
 
 
@@ -18,7 +22,8 @@
     <color name="white">#ffffff</color>
     <color name="white_pressed">#f1f1f1</color>
     <color name="pink">#FF4081</color>
-    <color name="pink_pressed">#ec407a</color>
+    <color name="pinkLight">#FF60AF</color>
+    <color name="pink_pressed">#FF79BC</color>
     <color name="blue_semi_transparent">#805677fc</color>
     <color name="blue_semi_transparent_pressed">#80738ffe</color>
 
