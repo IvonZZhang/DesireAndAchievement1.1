@@ -32,7 +32,7 @@ import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 public class NewTodo extends AppCompatActivity{
     private TextView chosenDDL;
     private String chosenDDL_string;
-    //选择日期Dialog
+
     private DatePickerDialog datePickerDialog;
 
     private Calendar calendar;
@@ -89,28 +89,11 @@ public class NewTodo extends AppCompatActivity{
     }
 
     public void showDialog(View view) {
-//        new DatePickerDialog(
-//                this,
-//                // set listener
-//                new DatePickerDialog.OnDateSetListener() {
-//
-//                    @Override
-//                    public void onDateSet(DatePicker view, int year,
-//                                          int monthOfYear, int dayOfMonth) {
-//                        chosenDDL.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-//                        chosenDDL_string = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
-//                    }
-//                }
-//                , calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
-//        )
-//
-//                .show();
         datePickerDialog = new DatePickerDialog(
                 this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                //monthOfYear 得到的月份会减1所以我们要加1
-                chosenDDL.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                chosenDDL.setText (year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                 chosenDDL_string = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
             }
         },
@@ -118,7 +101,7 @@ public class NewTodo extends AppCompatActivity{
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
-        //自动弹出键盘问题解决
+        //solve keyboard conflict
         datePickerDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 

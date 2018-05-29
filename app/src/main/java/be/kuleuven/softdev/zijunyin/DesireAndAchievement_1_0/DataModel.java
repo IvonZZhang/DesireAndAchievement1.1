@@ -21,9 +21,7 @@ public class DataModel {
         this.coins = coins;
     }
 
-    public DataModel(){
-
-    }
+    public DataModel(){}
 
     public int getId(){
         return id;

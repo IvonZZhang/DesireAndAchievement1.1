@@ -29,19 +29,4 @@ public class DBManager {
         queue.add(stringRequest);
     }
 
-    /*public static int callServer(String url, Context context, final Supplier<Integer> responseSupplier) {
-        //int presentCoins;
-        RequestQueue queue = Volley.newRequestQueue(context);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        int presentCoins = responseSupplier.get();
-                    }
-                }, error -> System.out.println("failed to work"));
-        queue.add(stringRequest);
-        return presentCoins;
-    }*/
-
-
 }

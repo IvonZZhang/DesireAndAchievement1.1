@@ -1,6 +1,7 @@
 package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -110,7 +111,6 @@ public class MainActivity extends AppCompatActivity
 
         //add bottom navigation bar
         BottomNavigationBar bottomNavigationBar = findViewById(R.id.bottom_navigation_bar);
-
         BottomNavigationItem habititem = new BottomNavigationItem(R.drawable.ic_habit_off, getString(R.string.Habit));
         BottomNavigationItem todoitem = new BottomNavigationItem(R.drawable.ic_todo_off, getString(R.string.Todo));
         BottomNavigationItem rewarditem = new BottomNavigationItem(R.drawable.ic_reward_off, getString(R.string.Reward));
@@ -120,10 +120,8 @@ public class MainActivity extends AppCompatActivity
                 .addItem(todoitem)
                 .addItem(rewarditem)
                 .initialise();
-        System.out.println(chosen_default_page);
         bottomNavigationBar.setTabSelectedListener(this);
         setDefaultFragment();
-
     }
 
     public void updateCoinNumber(){
@@ -148,10 +146,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+        //close fab menu when main activity resume
         fab.collapse();
     }
-
-
 
     @Override
     public void onBackPressed() {
@@ -174,77 +171,10 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         }
         else if (id == R.id.nav_language) {
-            new AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.ChooseLanguage))
-                    .setSingleChoiceItems(languages, 0,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    chosen_language = languages[which];
-                                }
-                            }
-                    )
-                    .setPositiveButton("OK",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Toast.makeText(getApplicationContext(), chosen_language,
-                                            Toast.LENGTH_LONG).show();
-                                    if(chosen_language.equals("English")){
-                                        setLocale("en");
-                                    }
-                                    else{
-                                        setLocale("zh");
-                                    }
-
-                                }
-                    })
-                    .show();
+            showLanguageDialog();
         }
-//        else if (id == R.id.nav_default_page) {
-//            new AlertDialog.Builder(this)
-//                    .setTitle("Choose the default page")
-//                    .setSingleChoiceItems(pages, 0,
-//                            new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    chosen_default_page = pages[which];
-//                                }
-//                            }
-//                    )
-//                    .setPositiveButton("OK",
-//                            new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    Toast.makeText(getApplicationContext(), chosen_default_page,
-//                                            Toast.LENGTH_LONG).show();
-//                                    String url = "http://api.a17-sd603.studev.groept.be/set_default_page/" +
-//                                            chosen_default_page;
-//                                    DBManager.callServer(url, getBaseContext());
-//                                }
-//                    })
-//                    .show();
-//        }
         else if (id == R.id.nav_first_weekday) {
-            new AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.chooseFirstDayOfWeek))
-                    .setSingleChoiceItems(weekdays, 0,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    chosen_first_day = weekdays[which];
-                                }
-                            }
-                    )
-                    .setPositiveButton(getString(R.string.ok),
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Toast.makeText(getApplicationContext(), chosen_first_day,
-                                            Toast.LENGTH_LONG).show();
-                                    String url = "http://api.a17-sd603.studev.groept.be/set_first_day/" +
-                                            chosen_first_day;
-                                    DBManager.callServer(url, getBaseContext());
-                                }
-                            })
-                    .show();
+            showWeekdayDialog();
         }
         else if (id == R.id.nav_about) {
             Intent intent = new Intent(this,About.class);
@@ -254,6 +184,58 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void showWeekdayDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.chooseFirstDayOfWeek))
+                .setSingleChoiceItems(weekdays, 0,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                chosen_first_day = weekdays[which];
+                            }
+                        }
+                )
+                .setPositiveButton(getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(getApplicationContext(), chosen_first_day,
+                                        Toast.LENGTH_LONG).show();
+                                String url = "http://api.a17-sd603.studev.groept.be/set_first_day/" +
+                                        chosen_first_day;
+                                DBManager.callServer(url, getBaseContext());
+                            }
+                        })
+                .show();
+    }
+
+    private void showLanguageDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.ChooseLanguage))
+                .setSingleChoiceItems(languages, 0,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                chosen_language = languages[which];
+                            }
+                        }
+                )
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(getApplicationContext(), chosen_language,
+                                        Toast.LENGTH_LONG).show();
+                                if(chosen_language.equals("English")){
+                                    setLocale("en");
+                                }
+                                else{
+                                    setLocale("zh");
+                                }
+
+                            }
+                })
+                .show();
     }
 
     /**
@@ -279,7 +261,6 @@ public class MainActivity extends AppCompatActivity
         switch (position) {
             case 0:
                 if (mHabitFragment == null) {
-                    //mHabitFragment = HabitFragment.newInstance();
                     mHabitFragment = new HabitFragment();
                 }
                 transaction.replace(R.id.mainDisplay, mHabitFragment);
@@ -287,7 +268,6 @@ public class MainActivity extends AppCompatActivity
                 break;
             case 1:
                 if (mTodoFragment == null) {
-                    //mTodoFragment = TodoFragment.newInstance("待办");
                     mTodoFragment = new TodoFragment();
                 }
                 transaction.replace(R.id.mainDisplay, mTodoFragment);
@@ -295,45 +275,10 @@ public class MainActivity extends AppCompatActivity
                 break;
             case 2:
                 if (mRewardFragment == null) {
-                    //mRewardFragment = RewardFragment.newInstance("奖励");
                     mRewardFragment = new RewardFragment();
                 }
                 transaction.replace(R.id.mainDisplay, mRewardFragment);
                 toolbar.setBackgroundColor(getResources().getColor(R.color.orangeDark));
-                break;
-            default:
-                break;
-        }
-        // commit fragment
-        transaction.commit();
-    }
-
-    public void onTabSelectedRefresh(int position) {
-        Log.d(TAG, "onTabSelected() called with: " + "position = [" + position + "]");
-        FragmentManager fm = this.getFragmentManager();
-        //open fragment
-        FragmentTransaction transaction = fm.beginTransaction();
-        switch (position) {
-            case 0:
-                //if (mHabitFragment == null) {
-                    //mHabitFragment = HabitFragment.newInstance();
-                    mHabitFragment = new HabitFragment();
-                //}
-                transaction.replace(R.id.mainDisplay, mHabitFragment);
-                break;
-            case 1:
-                if (mTodoFragment == null) {
-                    //mTodoFragment = TodoFragment.newInstance("待办");
-                    mTodoFragment = new TodoFragment();
-                }
-                transaction.replace(R.id.mainDisplay, mTodoFragment);
-                break;
-            case 2:
-                if (mRewardFragment == null) {
-                    //mRewardFragment = RewardFragment.newInstance("奖励");
-                    mRewardFragment = new RewardFragment();
-                }
-                transaction.replace(R.id.mainDisplay, mRewardFragment);
                 break;
             default:
                 break;
