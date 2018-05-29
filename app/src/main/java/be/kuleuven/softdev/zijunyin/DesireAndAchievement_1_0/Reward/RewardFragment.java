@@ -35,6 +35,14 @@ public class RewardFragment extends Fragment{
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        String url ="http://api.a17-sd603.studev.groept.be/testReward";
+        Consumer<String> consumer = this::parseRewardData;
+        DBManager.callServer(url, getContext(), consumer);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_reward_list, container, false);
@@ -43,9 +51,9 @@ public class RewardFragment extends Fragment{
         rewardList.setLayoutManager(new LinearLayoutManager(getContext()));
         rewardArray = new ArrayList<>();
 
-        String url ="http://api.a17-sd603.studev.groept.be/testReward";
-        Consumer<String> consumer = this::parseRewardData;
-        DBManager.callServer(url, getContext(), consumer);
+//        String url ="http://api.a17-sd603.studev.groept.be/testReward";
+//        Consumer<String> consumer = this::parseRewardData;
+//        DBManager.callServer(url, getContext(), consumer);
 
         /*if(rewardArray.isEmpty()){
             rewardList.setVisibility(View.GONE);
@@ -70,6 +78,7 @@ public class RewardFragment extends Fragment{
 
     public void parseRewardData(String response) {
         try{
+            rewardArray = new ArrayList<>();
             JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
             for(int i = 0; i < jArr.length(); i++){
                 JSONObject jObj = jArr.getJSONObject( i );

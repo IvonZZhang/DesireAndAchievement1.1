@@ -121,8 +121,15 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
                 //add new coins from achieved
                 url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
                 DBManager.callServer(url, context);
-                Toast.makeText(view.getContext(), "", Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), "You deserve it!", Toast.LENGTH_SHORT).show();
+                String url = "http://api.a17-sd603.studev.groept.be/change_reward_delete_status/" + rewardArray.get(position).getId();
+                DBManager.callServer(url, context);
 
+                mItemManger.removeShownLayouts(holder.swipeLayout);
+                rewardArray.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, rewardArray.size());
+                mItemManger.closeAllItems();
                 holder.swipeLayout.close();
             }
         });

@@ -65,11 +65,14 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
         catch (ParseException e) {
             e.printStackTrace();
         }
-        if(convertedDate.before(Calendar.getInstance().getTime())){
+        Calendar nowCalendar = Calendar.getInstance();
+        nowCalendar.add(Calendar.DATE, -1);
+        Date now = nowCalendar.getTime();
+        if(convertedDate.before(now)){
             holder.coinNumber.setText(R.string.overdue);
-            holder.coinNumber.setTextColor(Color.WHITE);
-            holder.coinNumber.setBackgroundColor(Color.RED);
-            holder.coinNumber.setTextSize(16);
+//            holder.coinNumber.setTextColor(Color.WHITE);
+//            holder.coinNumber.setBackgroundColor(Color.RED);
+//            holder.coinNumber.setTextSize(16);
         }
 
         //Create swipe menu
@@ -107,7 +110,15 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
             //add new coins from achieved
             url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
             DBManager.callServer(url, context);
-            Toast.makeText(view.getContext(), "Clicked on Complete ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(view.getContext(), "AWESOME!", Toast.LENGTH_SHORT).show();
+            url = "http://api.a17-sd603.studev.groept.be/change_todo_delete_status/" + todoArray.get(position).getId();
+            DBManager.callServer(url, context);
+
+            mItemManger.removeShownLayouts(holder.swipeLayout);
+            todoArray.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, todoArray.size());
+            mItemManger.closeAllItems();
 
             holder.swipeLayout.close();
         });

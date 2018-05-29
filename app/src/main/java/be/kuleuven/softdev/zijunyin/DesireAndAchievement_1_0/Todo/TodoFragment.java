@@ -23,9 +23,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DataModel;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Locale;
 import java.util.function.Consumer;
 
 public class TodoFragment extends Fragment {
@@ -39,6 +46,14 @@ public class TodoFragment extends Fragment {
 /*TODO: refresh the list every time it has changed*/
 
     @Override
+    public void onResume() {
+        super.onResume();
+        String url ="http://api.a17-sd603.studev.groept.be/testTodo";
+        Consumer<String> consumer = this::parseTodoData;
+        DBManager.callServer(url, getContext(), consumer);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_todo_list, container, false);
@@ -47,9 +62,9 @@ public class TodoFragment extends Fragment {
         todoList.setLayoutManager(new LinearLayoutManager(getContext()));
         todoArray = new ArrayList<>();
 
-        String url ="http://api.a17-sd603.studev.groept.be/testTodo";
-        Consumer<String> consumer = this::parseTodoData;
-        DBManager.callServer(url, getContext(), consumer);
+//        String url ="http://api.a17-sd603.studev.groept.be/testTodo";
+//        Consumer<String> consumer = this::parseTodoData;
+//        DBManager.callServer(url, getContext(), consumer);
 
         /*if(todoArray.isEmpty()){
             todoList.setVisibility(View.GONE);
@@ -75,6 +90,7 @@ public class TodoFragment extends Fragment {
 
     public void parseTodoData(String response) {
         try{
+            todoArray = new ArrayList<>();
             JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
             for(int i = 0; i < jArr.length(); i++){
                 JSONObject jObj = jArr.getJSONObject( i );
@@ -89,6 +105,27 @@ public class TodoFragment extends Fragment {
                     );
                 }
             }
+            Comparator<TodoDataModel> comparator = new Comparator<TodoDataModel>() {
+                @Override
+                public int compare(TodoDataModel o1, TodoDataModel o2) {
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date date1 = new Date();
+                    Date date2 = new Date();
+                    try{
+                        date1 = dateFormat.parse(o1.getTodoDDL());
+                        date2 = dateFormat.parse(o2.getTodoDDL());
+
+                    }
+                    catch(Exception e){
+                        System.out.println(e);
+                    }
+                    if(date1.before(date2)){
+                        return -1;
+                    }
+                    else return 1;
+                }
+            };
+            Collections.sort(todoArray, comparator);
             TodoAdapter habitAdapter = new TodoAdapter(getContext(), todoArray);
             habitAdapter.setMode(Attributes.Mode.Single);
             todoList.setAdapter(habitAdapter);

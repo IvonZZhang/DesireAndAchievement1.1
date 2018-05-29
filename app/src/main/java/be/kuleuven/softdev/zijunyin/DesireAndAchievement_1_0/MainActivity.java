@@ -83,7 +83,17 @@ public class MainActivity extends AppCompatActivity
 
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                //updateCoinNumber();
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                updateCoinNumber();
+            }
+        };
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -173,10 +183,6 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         fab.collapse();
-//        onTabSelectedRefresh(0);
-//        onTabSelectedRefresh(1);
-//        onTabSelectedRefresh(2);
-        onTabSelected(lastPosition);
     }
 
 
@@ -284,7 +290,6 @@ public class MainActivity extends AppCompatActivity
     private void setDefaultFragment() {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
-
                 mHabitFragment = new HabitFragment();
                 transaction.replace(R.id.mainDisplay, mHabitFragment);
         toolbar.setBackgroundColor(getResources().getColor(R.color.greenDark));
@@ -389,8 +394,5 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(this, NewReward.class);
         startActivity(intent);
     }
-
-    public String getFistDay(){
-        return "first day";
-    }
 }
+
