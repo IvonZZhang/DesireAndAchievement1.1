@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -87,11 +88,10 @@ public class NewHabit extends AppCompatActivity {
     }
 
     public void chooseCycle(View view){
-        new AlertDialog.Builder(this)
+        AlertDialog di = new AlertDialog.Builder(this)
                 .setTitle("Choose cycle for new habit")
                 .setSingleChoiceItems(Cycles, 0,
                         new DialogInterface.OnClickListener() {
-
                             public void onClick(DialogInterface dialog, int which) {
                                 TextView new_cycle = findViewById(R.id.your_cycle);
                                 new_cycle.setText(Cycles[which]);
@@ -101,6 +101,9 @@ public class NewHabit extends AppCompatActivity {
                         }
                 )
                 .show();
+        di.getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
+                WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
     }
 
 }

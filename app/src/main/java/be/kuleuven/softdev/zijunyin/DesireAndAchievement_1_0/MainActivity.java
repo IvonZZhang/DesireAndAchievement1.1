@@ -11,6 +11,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity
     private int lastPosition;
     private String[] languages = {"English", "Chinese"};
     private String chosen_language;
-    private String[] pages = {"Habit", "Todo", "Reward"};
+    private String[] pages = {"Habit","Todo","Reward"};
     private String chosen_default_page;
     private String[] weekdays = {"Monday","Sunday"};
     private String chosen_first_day;
@@ -95,7 +96,6 @@ public class MainActivity extends AppCompatActivity
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 updateCoinNumber();
-                System.out.println("UUUUPPPPDDDDAAAATTTTEEEE");
             }
         };
         drawer.addDrawerListener(toggle);
