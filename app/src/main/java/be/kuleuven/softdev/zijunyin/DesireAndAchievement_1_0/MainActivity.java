@@ -7,6 +7,7 @@ import android.app.FragmentTransaction;
 import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -63,13 +64,14 @@ public class MainActivity extends AppCompatActivity
     private TextView current_coin_number;
     private String curCoinNumber;
     private DrawerLayout drawer;
+    private Toolbar toolbar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         chosen_default_page = "Reward";
@@ -171,9 +173,9 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         fab.collapse();
-        onTabSelectedRefresh(0);
-        onTabSelectedRefresh(1);
-        onTabSelectedRefresh(2);
+//        onTabSelectedRefresh(0);
+//        onTabSelectedRefresh(1);
+//        onTabSelectedRefresh(2);
         onTabSelected(lastPosition);
     }
 
@@ -285,7 +287,7 @@ public class MainActivity extends AppCompatActivity
 
                 mHabitFragment = new HabitFragment();
                 transaction.replace(R.id.mainDisplay, mHabitFragment);
-
+        toolbar.setBackgroundColor(getResources().getColor(R.color.greenDark));
 
         transaction.commit();
     }
@@ -303,10 +305,8 @@ public class MainActivity extends AppCompatActivity
                     //mHabitFragment = HabitFragment.newInstance();
                     mHabitFragment = new HabitFragment();
                 }
-                else{
-                    mHabitFragment.getInstance();
-                }
                 transaction.replace(R.id.mainDisplay, mHabitFragment);
+                toolbar.setBackgroundColor(getResources().getColor(R.color.greenDark));
                 break;
             case 1:
                 if (mTodoFragment == null) {
@@ -314,6 +314,7 @@ public class MainActivity extends AppCompatActivity
                     mTodoFragment = new TodoFragment();
                 }
                 transaction.replace(R.id.mainDisplay, mTodoFragment);
+                toolbar.setBackgroundColor(getResources().getColor(R.color.blueDark));
                 break;
             case 2:
                 if (mRewardFragment == null) {
@@ -321,6 +322,7 @@ public class MainActivity extends AppCompatActivity
                     mRewardFragment = new RewardFragment();
                 }
                 transaction.replace(R.id.mainDisplay, mRewardFragment);
+                toolbar.setBackgroundColor(getResources().getColor(R.color.orangeDark));
                 break;
             default:
                 break;

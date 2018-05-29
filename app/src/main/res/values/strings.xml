@@ -50,10 +50,31 @@
     <string name="user_manual_label_1">
         GUIDE
     </string>
-    <string name="user_manual_text_guide">
-        -Swipe right to finish a mission.
+    <string name="user_manual_text_1">
+        -Swipe left to finish a mission.
+        \n-Swipe right to delete a mission.
         \n-Click + to create a habit, todo or reward.
         \n-Call drawer for more actions.
+    </string>
+    <string name="user_manual_label_2">
+        HABIT
+    </string>
+    <string name="user_manual_text_2">
+        Record your daily work here. For example: wake up before 7am, sleep before 11pm.
+        \nEvery mission can be marked a price. Once the mission is done, you will win the price.
+    </string>
+    <string name="user_manual_label_3">
+        TODO
+    </string>
+    <string name="user_manual_text_3">
+        It is another list for win score. It records all todo issue.
+    </string>
+    <string name="user_manual_label_4">
+        REWARD
+    </string>
+    <string name="user_manual_text_4">
+        Record your self reward here. For example: enjoy a cup of ice cream or buy a pair of NIKE shoes.
+        \nIt also can be remarked a price. You should pay coins for your reward.\n\n\n\n
     </string>
 
     <string name="about_text">

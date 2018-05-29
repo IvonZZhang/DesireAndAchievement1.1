@@ -21,7 +21,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/orange"
+            android:background="@drawable/layout_border_reward_done"
             android:contentDescription="@string/complete"
             android:gravity="center"
             android:src="@drawable/ic_achieved" />
@@ -38,7 +38,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/red"
+            android:background="@drawable/layout_border_delete"
             android:contentDescription="@string/delete"
             android:gravity="center"
             android:src="@drawable/ic_delete" />
@@ -48,15 +48,16 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="@drawable/layout_border_reward">
 
         <TextView
             android:id="@+id/RewardName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="20dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
             android:text="@string/rewardname"
             android:textSize="18sp"
             android:textStyle="bold"

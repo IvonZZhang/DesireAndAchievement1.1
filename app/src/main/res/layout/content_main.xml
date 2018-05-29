@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/bottom_navigation_bar"
         android:layout_alignParentEnd="true"
-        fab:fab_addButtonColorNormal="@color/pink"
+        fab:fab_addButtonColorNormal="@color/pinkLight"
         fab:fab_addButtonColorPressed="@color/pink_pressed"
         fab:fab_addButtonPlusIconColor="@color/white"
         fab:fab_labelStyle="@style/menu_labels_style"
