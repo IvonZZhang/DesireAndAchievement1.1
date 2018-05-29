@@ -115,21 +115,30 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
         holder.Complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int newCoins = curCoins + Integer.parseInt(rewardArray.get(position).getCoins());
-                curCoins = newCoins;
+                updateCoinNumber();
+                int costCoin = Integer.parseInt(rewardArray.get(position).getCoins());
+                if(curCoins > Math.abs(costCoin)){
+                    int newCoins = curCoins + costCoin;
+                    curCoins = newCoins;
+                    //add new coins from achieved
+                    url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
+                    DBManager.callServer(url, context);
+                    Toast.makeText(view.getContext(), "You deserve it!", Toast.LENGTH_SHORT).show();
+                    String url = "http://api.a17-sd603.studev.groept.be/change_reward_delete_status/" + rewardArray.get(position).getId();
+                    DBManager.callServer(url, context);
 
-                //add new coins from achieved
-                url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
-                DBManager.callServer(url, context);
-                Toast.makeText(view.getContext(), "You deserve it!", Toast.LENGTH_SHORT).show();
-                String url = "http://api.a17-sd603.studev.groept.be/change_reward_delete_status/" + rewardArray.get(position).getId();
-                DBManager.callServer(url, context);
+                    mItemManger.removeShownLayouts(holder.swipeLayout);
+                    rewardArray.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, rewardArray.size());
+                    mItemManger.closeAllItems();
 
-                mItemManger.removeShownLayouts(holder.swipeLayout);
-                rewardArray.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, rewardArray.size());
-                mItemManger.closeAllItems();
+                }
+                else {
+                    Toast.makeText(context, "You don't have enough coins!"+
+                            "\nEarn more coins then reward yourself",
+                            Toast.LENGTH_LONG).show();
+                }
                 holder.swipeLayout.close();
             }
         });
@@ -199,6 +208,24 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
             }
         }
         catch(JSONException e){
+            System.out.println(e);
+        }
+    }
+
+    public void updateCoinNumber(){
+        String url = "http://api.a17-sd603.studev.groept.be/get_coin_umber";
+        Consumer<String> consumer = this::parseCoinData;
+        DBManager.callServer(url,context,consumer);
+    }
+
+    public void parseCoinData(String response) {
+        try{
+            JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
+            JSONObject jObj = jArr.getJSONObject(0);
+            String curCoinNumber = jObj.getString("Coins");
+            curCoins = Integer.parseInt(curCoinNumber);
+        }
+        catch (JSONException e) {
             System.out.println(e);
         }
     }
