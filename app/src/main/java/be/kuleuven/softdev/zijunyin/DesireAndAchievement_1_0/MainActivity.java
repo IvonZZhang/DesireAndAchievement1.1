@@ -7,8 +7,10 @@ import android.app.FragmentTransaction;
 import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -31,6 +33,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Locale;
 import java.util.function.Consumer;
 
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.HabitFragment;
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity
     private int lastPosition;
     private String[] languages = {"English", "Chinese"};
     private String chosen_language;
-    private String[] pages = {"Habit","Todo","Reward"};
+    private String[] pages = {"Habit", "Todo", "Reward"};
     private String chosen_default_page;
     private String[] weekdays = {"Monday","Sunday"};
     private String chosen_first_day;
@@ -75,7 +78,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         chosen_default_page = "Reward";
-        updateDefaultPage();
+        //updateDefaultPage();
         System.out.println(chosen_default_page);
         chosen_language = "English";
 
@@ -84,14 +87,15 @@ public class MainActivity extends AppCompatActivity
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-            public void onDrawerClosed(View view) {
+            public void onDrawerClosed(View view){
                 super.onDrawerClosed(view);
-                //updateCoinNumber();
+
             }
 
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 updateCoinNumber();
+                System.out.println("UUUUPPPPDDDDAAAATTTTEEEE");
             }
         };
         drawer.addDrawerListener(toggle);
@@ -107,9 +111,9 @@ public class MainActivity extends AppCompatActivity
         //add bottom navigation bar
         BottomNavigationBar bottomNavigationBar = findViewById(R.id.bottom_navigation_bar);
 
-        BottomNavigationItem habititem = new BottomNavigationItem(R.drawable.ic_habit_off, "Habit");
-        BottomNavigationItem todoitem = new BottomNavigationItem(R.drawable.ic_todo_off, "Todo");
-        BottomNavigationItem rewarditem = new BottomNavigationItem(R.drawable.ic_reward_off, "Reward");
+        BottomNavigationItem habititem = new BottomNavigationItem(R.drawable.ic_habit_off, getString(R.string.Habit));
+        BottomNavigationItem todoitem = new BottomNavigationItem(R.drawable.ic_todo_off, getString(R.string.Todo));
+        BottomNavigationItem rewarditem = new BottomNavigationItem(R.drawable.ic_reward_off, getString(R.string.Reward));
 
         bottomNavigationBar
                 .addItem(habititem)
@@ -123,7 +127,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void updateCoinNumber(){
-        String url = "http://api.a17-sd603.studev.groept.be/get_coin_umber";
+        String url = "http://api.a17-sd603.studev.groept.be/get_coin_number";
         Consumer<String> consumer = this::parseCoinData;
         DBManager.callServer(url,getBaseContext(),consumer);
     }
@@ -134,27 +138,7 @@ public class MainActivity extends AppCompatActivity
             JSONObject jObj = jArr.getJSONObject(0);
             curCoinNumber = jObj.getString("Coins");
             current_coin_number.setText(curCoinNumber);
-        }
-        catch (JSONException e) {
-            System.out.println(e);
-        }
-    }
-
-    public void updateDefaultPage(){
-        String url = "http://api.a17-sd603.studev.groept.be/get_default_page";
-        System.out.println(chosen_default_page+"222");
-        Consumer<String> consumer = this::parseDefaultPage;
-        System.out.println(chosen_default_page+"111");
-        DBManager.callServer(url,getBaseContext(),consumer);
-        System.out.println(chosen_default_page);
-    }
-
-    public void parseDefaultPage(String response) {
-        try{
-            JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
-            JSONObject jObj = jArr.getJSONObject(0);
-            chosen_default_page = jObj.getString("DefaultPage");
-            System.out.println(chosen_default_page + "han shu li");
+            System.out.println(curCoinNumber);
         }
         catch (JSONException e) {
             System.out.println(e);
@@ -191,7 +175,7 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_language) {
             new AlertDialog.Builder(this)
-                    .setTitle("Choose language")
+                    .setTitle(getString(R.string.ChooseLanguage))
                     .setSingleChoiceItems(languages, 0,
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -205,7 +189,13 @@ public class MainActivity extends AppCompatActivity
                                 public void onClick(DialogInterface dialog, int which) {
                                     Toast.makeText(getApplicationContext(), chosen_language,
                                             Toast.LENGTH_LONG).show();
-                                    // TODO: 2018/5/28  这里写按下保存语言选择后的操作。使用已经存下选项的String chosen_language
+                                    if(chosen_language.equals("English")){
+                                        setLocale("en");
+                                    }
+                                    else{
+                                        setLocale("zh");
+                                    }
+
                                 }
                     })
                     .show();
@@ -235,7 +225,7 @@ public class MainActivity extends AppCompatActivity
 //        }
         else if (id == R.id.nav_first_weekday) {
             new AlertDialog.Builder(this)
-                    .setTitle("Choose the first day of week")
+                    .setTitle(getString(R.string.chooseFirstDayOfWeek))
                     .setSingleChoiceItems(weekdays, 0,
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -243,7 +233,7 @@ public class MainActivity extends AppCompatActivity
                                 }
                             }
                     )
-                    .setPositiveButton("OK",
+                    .setPositiveButton(getString(R.string.ok),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -375,6 +365,18 @@ public class MainActivity extends AppCompatActivity
     public void onClickNewReward(View view) {
         Intent intent = new Intent(this, NewReward.class);
         startActivity(intent);
+    }
+
+    public void setLocale(String lang) {
+        Locale myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+        Intent refresh = new Intent(this, MainActivity.class);
+        startActivity(refresh);
+        finish();
     }
 }
 

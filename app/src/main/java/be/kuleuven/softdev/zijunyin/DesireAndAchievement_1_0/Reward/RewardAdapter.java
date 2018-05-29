@@ -42,6 +42,7 @@ import org.json.JSONObject;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
@@ -112,18 +113,24 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
 
         //Set On Click Listener to menu elements
 
-        holder.Complete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateCoinNumber();
-                int costCoin = Integer.parseInt(rewardArray.get(position).getCoins());
-                if(curCoins > Math.abs(costCoin)){
-                    int newCoins = curCoins + costCoin;
-                    curCoins = newCoins;
-                    //add new coins from achieved
-                    url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
-                    DBManager.callServer(url, context);
-                    Toast.makeText(view.getContext(), "You deserve it!", Toast.LENGTH_SHORT).show();
+        holder.Complete.setOnClickListener(view -> {
+            updateCoinNumber();
+            int costCoin = Integer.parseInt(rewardArray.get(position).getCoins());
+            System.out.println("before if costCoin"+costCoin);
+            System.out.println("before if curCoins"+curCoins);
+
+            if(curCoins > Math.abs(costCoin)){
+                int newCoins = curCoins + costCoin;
+                System.out.println("costCoin" + costCoin);
+                System.out.println("curCoins" + curCoins);
+                System.out.println("newCoins" + newCoins);
+                curCoins = newCoins;
+                //add new coins from achieved
+                url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
+                DBManager.callServer(url, context);
+                Toast.makeText(view.getContext(), "You deserve it!", Toast.LENGTH_SHORT).show();
+
+                if(rewardArray.get(position).isRepeated().equals("0")){
                     String url = "http://api.a17-sd603.studev.groept.be/change_reward_delete_status/" + rewardArray.get(position).getId();
                     DBManager.callServer(url, context);
 
@@ -132,15 +139,16 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
                     notifyItemRemoved(position);
                     notifyItemRangeChanged(position, rewardArray.size());
                     mItemManger.closeAllItems();
+                }
 
-                }
-                else {
-                    Toast.makeText(context, "You don't have enough coins!"+
-                            "\nEarn more coins then reward yourself",
-                            Toast.LENGTH_LONG).show();
-                }
-                holder.swipeLayout.close();
+
             }
+            else {
+                Toast.makeText(context, "You don't have enough coins!"+
+                        "\nEarn more coins then reward yourself",
+                        Toast.LENGTH_LONG).show();
+            }
+            holder.swipeLayout.close();
         });
 
         holder.Delete.setOnClickListener(new View.OnClickListener() {
@@ -213,7 +221,7 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
     }
 
     public void updateCoinNumber(){
-        String url = "http://api.a17-sd603.studev.groept.be/get_coin_umber";
+        String url = "http://api.a17-sd603.studev.groept.be/get_coin_number";
         Consumer<String> consumer = this::parseCoinData;
         DBManager.callServer(url,context,consumer);
     }

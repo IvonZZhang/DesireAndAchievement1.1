@@ -78,7 +78,10 @@
     </string>
 
     <string name="about_text">
-        This application is developed by Yifeng Zhang and Zijun Yin
+        Developed by Yifeng Zhang and Zijun Yin.
+        \nPowered by Prof. Wauters Jeroen, KULeuven.
+        \n©2018 All rights reserved.
+        \n
         \nDonate us if you like :)
     </string>
 
@@ -112,4 +115,21 @@
     <string name="edit">edit</string>
     <string name="complete">complete</string>
     <string name="delete">delete</string>
+    <string name="NewHabit">New Habit</string>
+
+    <string name="NewTodo">New Todo</string>
+    <string name="NewReward">New Reward</string>
+    <string name="Habit">Habit</string>
+    <string name="Todo">Todo</string>
+    <string name="Reward">Reward</string>
+    <string name="Monday">Monday</string>
+    <string name="Sunday">Sunday</string>
+    <string name="ChooseLanguage">Choose Language</string>
+    <string name="chooseFirstDayOfWeek">Choose first day of week</string>
+
+    <string name="AboutUs">About us</string>
+    <string name="UserManual">User Manual</string>
+
+
+
 </resources>

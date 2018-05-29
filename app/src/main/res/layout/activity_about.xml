@@ -12,7 +12,7 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:title="About us">
+        app:title="@string/AboutUs">
     </android.support.v7.widget.Toolbar>
 
     <TextView

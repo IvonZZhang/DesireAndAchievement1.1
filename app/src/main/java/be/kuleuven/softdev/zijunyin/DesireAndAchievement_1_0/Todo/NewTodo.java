@@ -41,12 +41,12 @@ public class NewTodo extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_todo);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.new_todo_toolbar);
+        Toolbar toolbar = findViewById(R.id.new_todo_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String date=sdf.format(new java.util.Date());
         chosenDDL = findViewById(R.id.choose_ddl);
         chosenDDL.setText(date);
@@ -71,7 +71,7 @@ public class NewTodo extends AppCompatActivity{
         try {
             EditText editText1 = findViewById(R.id.new_todo_name);
             todo_name = editText1.getText().toString();
-            EditText editText2 = (EditText) findViewById(R.id.todo_coin_number);
+            EditText editText2 = findViewById(R.id.todo_coin_number);
             coins = Integer.parseInt(editText2.getText().toString());
 
             String url = "http://api.a17-sd603.studev.groept.be/add_todo/" +

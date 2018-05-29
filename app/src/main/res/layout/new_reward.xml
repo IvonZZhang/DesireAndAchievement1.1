@@ -12,7 +12,7 @@
         android:background="@color/orangeDark"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:title="New Reward" >
+        app:title="@string/NewReward" >
 
         <Button
             android:id="@+id/save_reward"

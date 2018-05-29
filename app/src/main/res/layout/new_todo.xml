@@ -12,7 +12,7 @@
         android:background="@color/blueDark"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:title="New Todo" >
+        app:title="@string/NewTodo" >
 
         <Button
             android:id="@+id/save_todo"

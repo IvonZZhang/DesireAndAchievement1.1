@@ -12,7 +12,7 @@
         android:background="@color/greenDark"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:title="New Habit">
+        app:title="@string/NewHabit">
 
         <Button
             android:id="@+id/save_habit"

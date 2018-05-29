@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
+import java.sql.SQLOutput;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
     private int curCoins;
     private String firstDayOfWeek;
     private String url;
+    private String curTimesDone;
 
     public HabitAdapter(@NonNull Context context, ArrayList<HabitDataModel> habitArray) {
         this.context = context;
@@ -183,6 +185,16 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
             url = "http://api.a17-sd603.studev.groept.be/increase_timesdone/" + habitArray.get(position).getId();
             DBManager.callServer(url, context);
 
+//            url = "http://api.a17-sd603.studev.groept.be/get_timesdone/" + habitArray.get(position).getId();
+//            Consumer<String> consumer = this::getTimesDone;
+//            DBManager.callServer(url, context, consumer);
+            int curTimesDone = Integer.parseInt(habitArray.get(position).getTimesDone());
+            curTimesDone = curTimesDone + 1;
+            habitArray.get(position).setTimesDone(String.valueOf(curTimesDone));
+
+
+            holder.CycleAndTimes.setText(String.format("%s %s/%s", habitArray.get(position).getHabitCycle(), habitArray.get(position).getTimesDone(), habitArray.get(position).getTimesPerCycle()));
+
             int newCoins = curCoins + Integer.parseInt(habitArray.get(position).getCoins());
             curCoins = newCoins;
 
@@ -190,8 +202,8 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
             url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
             DBManager.callServer(url, context);
 
-            Toast.makeText(view.getContext(), "Clicked on Achieved ", Toast.LENGTH_SHORT).show();
-
+            Toast.makeText(view.getContext(), "You did it!", Toast.LENGTH_LONG).show();
+            //holder.
             holder.swipeLayout.close();
         });
 
@@ -290,6 +302,22 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
                 JSONObject jObj = jArr.getJSONObject(i);
                 if (!jObj.getString("FirstDay").isEmpty()) {
                     firstDayOfWeek = jObj.getString("FirstDay");
+                }
+            }
+        }
+        catch(JSONException e){
+            System.out.println(e);
+        }
+    }
+
+    private void getTimesDone(String response) {
+        try{
+            JSONArray jArr = new JSONArray(response);
+            for(int i = 0; i < jArr.length(); i++) {
+                JSONObject jObj = jArr.getJSONObject(i);
+                if (!jObj.getString("TimesDone").isEmpty()) {
+                    curTimesDone = jObj.getString("TimesDone");
+                    System.out.println(curTimesDone);
                 }
             }
         }

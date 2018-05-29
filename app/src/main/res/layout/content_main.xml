@@ -47,7 +47,7 @@
             fab:fab_colorNormal="@color/white"
             fab:fab_colorPressed="@color/white_pressed"
             fab:fab_size="mini"
-            fab:fab_title="New Habit" />
+            fab:fab_title="@string/NewHabit" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/action_b"
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:onClick="onClickNewTodo"
             fab:fab_colorNormal="@color/white"
-            fab:fab_title="New Todo"
+            fab:fab_title="@string/NewTodo"
             fab:fab_colorPressed="@color/white_pressed"
             fab:fab_size="mini"/>
 
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:onClick="onClickNewReward"
             fab:fab_colorNormal="@color/white"
-            fab:fab_title="New Reward"
+            fab:fab_title="@string/NewReward"
             fab:fab_colorPressed="@color/white_pressed"
             fab:fab_size="mini"/>
 

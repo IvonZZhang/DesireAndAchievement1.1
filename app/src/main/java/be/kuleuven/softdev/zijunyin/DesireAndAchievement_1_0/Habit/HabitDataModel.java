@@ -33,4 +33,6 @@ public class HabitDataModel extends DataModel {
         return timesPerCycle;
     }
 
+    public void setTimesDone(String newTimes){timesDone = newTimes;}
+
 }
