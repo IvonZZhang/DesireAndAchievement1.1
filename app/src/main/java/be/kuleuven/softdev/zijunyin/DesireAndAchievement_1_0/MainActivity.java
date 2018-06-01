@@ -1,18 +1,13 @@
 package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.ClipData;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -21,14 +16,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
-
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import org.json.JSONArray;
@@ -45,15 +38,11 @@ import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Reward.RewardFragme
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo.NewTodo;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo.TodoFragment;
 
-import static be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R.id.nav_header_main;
-
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         BottomNavigationBar.OnTabSelectedListener{
 
-    private BottomNavigationBar bottomNavigationBar;
-    int lastSelectedPosition = 0;
     private String TAG = MainActivity.class.getSimpleName();
     private HabitFragment mHabitFragment;
     private TodoFragment mTodoFragment;
@@ -61,13 +50,10 @@ public class MainActivity extends AppCompatActivity
     private FloatingActionsMenu fab;
     private int lastPosition;
     private String[] languages = {"English", "Chinese"};
-    private String chosen_language;
-    private String[] pages = {"Habit","Todo","Reward"};
-    private String chosen_default_page;
+    private int chosen_language = 0;    //0->English, 1->Chinese
     private String[] weekdays = {"Monday","Sunday"};
-    private String chosen_first_day;
+    private int chosen_first_day = 0;   //0->Monday, 1->Sunday
     private TextView current_coin_number;
-    private String curCoinNumber;
     private DrawerLayout drawer;
     private Toolbar toolbar;
 
@@ -79,28 +65,10 @@ public class MainActivity extends AppCompatActivity
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        chosen_default_page = "Reward";
-        //updateDefaultPage();
-        System.out.println(chosen_default_page);
-        chosen_language = "English";
-
         fab = findViewById(R.id.multiple_actions);
 
         drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-            public void onDrawerClosed(View view){
-                super.onDrawerClosed(view);
-
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                updateCoinNumber();
-            }
-        };
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        setDrawerToggle();
 
         //add left hand drawer view
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -121,7 +89,24 @@ public class MainActivity extends AppCompatActivity
                 .addItem(rewarditem)
                 .initialise();
         bottomNavigationBar.setTabSelectedListener(this);
+
         setDefaultFragment();
+    }
+
+    private void setDrawerToggle() {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            public void onDrawerClosed(View view){
+                super.onDrawerClosed(view);
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                updateCoinNumber();
+            }
+        };
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
     }
 
     public void updateCoinNumber(){
@@ -134,9 +119,7 @@ public class MainActivity extends AppCompatActivity
         try{
             JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
             JSONObject jObj = jArr.getJSONObject(0);
-            curCoinNumber = jObj.getString("Coins");
-            current_coin_number.setText(curCoinNumber);
-            System.out.println(curCoinNumber);
+            current_coin_number.setText(jObj.getString("Coins"));
         }
         catch (JSONException e) {
             System.out.println(e);
@@ -181,7 +164,6 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -189,23 +171,16 @@ public class MainActivity extends AppCompatActivity
     private void showWeekdayDialog() {
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.chooseFirstDayOfWeek))
-                .setSingleChoiceItems(weekdays, 0,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                chosen_first_day = weekdays[which];
-                            }
-                        }
+                .setSingleChoiceItems(weekdays, chosen_first_day,
+                        (dialog, which) -> chosen_first_day = which
                 )
                 .setPositiveButton(getString(R.string.ok),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getApplicationContext(), chosen_first_day,
-                                        Toast.LENGTH_LONG).show();
-                                String url = "http://api.a17-sd603.studev.groept.be/set_first_day/" +
-                                        chosen_first_day;
-                                DBManager.callServer(url, getBaseContext());
-                            }
+                        (dialog, which) -> {
+                            Toast.makeText(getApplicationContext(), weekdays[chosen_first_day],
+                                    Toast.LENGTH_LONG).show();
+                            String url = "http://api.a17-sd603.studev.groept.be/set_first_day/" +
+                                    weekdays[chosen_first_day];
+                            DBManager.callServer(url, getBaseContext());
                         })
                 .show();
     }
@@ -213,28 +188,21 @@ public class MainActivity extends AppCompatActivity
     private void showLanguageDialog() {
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.ChooseLanguage))
-                .setSingleChoiceItems(languages, 0,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                chosen_language = languages[which];
-                            }
-                        }
+                .setSingleChoiceItems(languages, chosen_language,
+                        (dialog, which) -> chosen_language = which
                 )
                 .setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getApplicationContext(), chosen_language,
-                                        Toast.LENGTH_LONG).show();
-                                if(chosen_language.equals("English")){
-                                    setLocale("en");
-                                }
-                                else{
-                                    setLocale("zh");
-                                }
-
+                        (dialog, which) -> {
+                            Toast.makeText(getApplicationContext(), languages[chosen_language],
+                                    Toast.LENGTH_LONG).show();
+                            if(languages[chosen_language].equals("English")){
+                                setLocale("en");
                             }
-                })
+                            else{
+                                setLocale("zh");
+                            }
+
+                        })
                 .show();
     }
 
