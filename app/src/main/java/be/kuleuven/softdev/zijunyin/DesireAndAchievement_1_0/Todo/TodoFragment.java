@@ -101,11 +101,11 @@ public class TodoFragment extends Fragment {
                 String curDDL = jObj.getString("Deadline");
                 String curRewardCoins = jObj.getString("RewardCoins");
                 //String curIsDeleted = jObj.getString("isDeleted");
-                if(jObj.getInt("isDeleted") == 0){
+//                if(jObj.getInt("isDeleted") == 0){
                     todoArray.add(
                             new TodoDataModel(curTodoId, curTodoName, curDDL, curRewardCoins)
                     );
-                }
+//                }
             }
             Comparator<TodoDataModel> comparator = new Comparator<TodoDataModel>() {
                 @Override

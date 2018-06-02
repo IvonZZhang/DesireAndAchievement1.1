@@ -73,6 +73,7 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
 //            holder.coinNumber.setTextColor(Color.WHITE);
 //            holder.coinNumber.setBackgroundColor(Color.RED);
 //            holder.coinNumber.setTextSize(16);
+            holder.mTodo.setCoins("0");
         }
 
         //Create swipe menu

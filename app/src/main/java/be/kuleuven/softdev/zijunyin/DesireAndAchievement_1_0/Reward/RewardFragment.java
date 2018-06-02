@@ -90,11 +90,11 @@ public class RewardFragment extends Fragment{
                 String curRewardName = jObj.getString("RewardName");
                 String curIsRepeated = jObj.getString("isRepeated");
                 String curRewardCoins = jObj.getString("ConsumedCoins");
-                if(jObj.getInt("isDeleted") == 0){
+//                if(jObj.getInt("isDeleted") == 0){
                     rewardArray.add(
                             new RewardDataModel(curRewardId, curRewardName, curIsRepeated, "-" + curRewardCoins)
                     );
-                }
+//                }
             }
             RewardAdapter rewardAdapter = new RewardAdapter(getContext(), rewardArray);
             rewardAdapter.setMode(Attributes.Mode.Single);

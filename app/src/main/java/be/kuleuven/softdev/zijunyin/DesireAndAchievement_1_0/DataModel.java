@@ -34,4 +34,8 @@ public class DataModel {
     public String getCoins() {
         return coins;
     }
+
+    public void setCoins(String coins){
+        this.coins = coins;
+    }
 }

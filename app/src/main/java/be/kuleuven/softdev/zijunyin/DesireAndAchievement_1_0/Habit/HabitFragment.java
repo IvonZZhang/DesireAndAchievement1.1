@@ -107,12 +107,12 @@ public class HabitFragment extends Fragment {
                 if(curCycleStartDate.isEmpty()) {
                     curCycleStartDate = dateFormat.format(Calendar.getInstance().getTime());
                 }
-                if(jObj.getInt("isDeleted") == 0){
+                //if(jObj.getInt("isDeleted") == 0){
                     habitArray.add(
                             new HabitDataModel(curHabitId, curHabitName, curHabitCycle, curTimesDone, curTimesPerCycle,
                                     curRewardCoins, curCycleStartDate)
                     );
-                }
+                //}
             }
             HabitAdapter habitAdapter = new HabitAdapter(getContext(), habitArray);
             habitAdapter.setMode(Attributes.Mode.Single);

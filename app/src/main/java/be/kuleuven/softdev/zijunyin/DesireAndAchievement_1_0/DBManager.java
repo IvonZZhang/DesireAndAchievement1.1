@@ -5,13 +5,10 @@ import android.content.Context;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.util.function.Consumer;
-import java.util.function.IntSupplier;
-import java.util.function.Supplier;
 
 public class DBManager {
 

@@ -42,7 +42,6 @@ import org.json.JSONObject;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
@@ -85,9 +84,7 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
 
         //Create swipe menu
         holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
-        //dari kiri
         holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.bottom_wrapper1));
-        //dari kanan
         holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.bottom_wraper));
 
         //Create swipe listener
@@ -130,6 +127,10 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
                 DBManager.callServer(url, context);
                 Toast.makeText(view.getContext(), "You deserve it!", Toast.LENGTH_SHORT).show();
 
+                Consumer<String> consumer = this::getCurCoins;
+                url = "http://api.a17-sd603.studev.groept.be/get_coins";
+                DBManager.callServer(url, context, consumer);
+
                 if(rewardArray.get(position).isRepeated().equals("0")){
                     String url = "http://api.a17-sd603.studev.groept.be/change_reward_delete_status/" + rewardArray.get(position).getId();
                     DBManager.callServer(url, context);
@@ -140,8 +141,6 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
                     notifyItemRangeChanged(position, rewardArray.size());
                     mItemManger.closeAllItems();
                 }
-
-
             }
             else {
                 Toast.makeText(context, "You don't have enough coins!"+
@@ -151,20 +150,17 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
             holder.swipeLayout.close();
         });
 
-        holder.Delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.Delete.setOnClickListener(v -> {
 
-                String url = "http://api.a17-sd603.studev.groept.be/change_reward_delete_status/" + rewardArray.get(position).getId();
-                DBManager.callServer(url, context);
+            String url = "http://api.a17-sd603.studev.groept.be/change_reward_delete_status/" + rewardArray.get(position).getId();
+            DBManager.callServer(url, context);
 
-                mItemManger.removeShownLayouts(holder.swipeLayout);
-                rewardArray.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, rewardArray.size());
-                mItemManger.closeAllItems();
-                Toast.makeText(v.getContext(), "Deleted ", Toast.LENGTH_SHORT).show();
-            }
+            mItemManger.removeShownLayouts(holder.swipeLayout);
+            rewardArray.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, rewardArray.size());
+            mItemManger.closeAllItems();
+            Toast.makeText(v.getContext(), "Deleted ", Toast.LENGTH_SHORT).show();
         });
 
         //apply ViewHolder
