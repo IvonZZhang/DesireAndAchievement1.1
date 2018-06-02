@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
         current_coin_number = headerView.findViewById(R.id.current_coin_number);
-        updateCoinNumber();
+        updateData();
 
         //add bottom navigation bar
         BottomNavigationBar bottomNavigationBar = findViewById(R.id.bottom_navigation_bar);
@@ -90,9 +90,6 @@ public class MainActivity extends AppCompatActivity
         bottomNavigationBar.setTabSelectedListener(this);
 
         setDefaultFragment();
-
-        updateFirstDay();
-        updateLanguage();
     }
 
     private void setDrawerToggle() {
@@ -104,62 +101,33 @@ public class MainActivity extends AppCompatActivity
 
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                updateCoinNumber();
+                updateData();
             }
         };
         drawer.addDrawerListener(toggle);
         toggle.syncState();
     }
 
-    public void updateCoinNumber(){
-        String url = "http://api.a17-sd603.studev.groept.be/get_coin_number";
-        Consumer<String> consumer = this::parseCoinData;
+    public void updateData(){
+        String url = "http://api.a17-sd603.studev.groept.be/get_user_data";
+        Consumer<String> consumer = this::parseData;
         DBManager.callServer(url,getBaseContext(),consumer);
     }
 
-    public void parseCoinData(String response) {
+    public void parseData(String response){
         try{
             JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
             JSONObject jObj = jArr.getJSONObject(0);
+
             current_coin_number.setText(jObj.getString("Coins"));
-        }
-        catch (JSONException e) {
-            System.out.println(e);
-        }
-    }
 
-    public void updateFirstDay(){
-        String url = "http://api.a17-sd603.studev.groept.be/get_first_day";
-        Consumer<String> consumer = this::parseFirstDay;
-        DBManager.callServer(url,getBaseContext(),consumer);
-    }
-
-    public void parseFirstDay(String response) {
-        try{
-            JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
-            JSONObject jObj = jArr.getJSONObject(0);
             if(jObj.getString("FirstDay").equals("Monday")){
                 chosen_first_day = 0;
             }
             else {
                 chosen_first_day = 1;
             }
-        }
-        catch (JSONException e) {
-            System.out.println(e);
-        }
-    }
 
-    public void updateLanguage(){
-        String url = "http://api.a17-sd603.studev.groept.be/get_language";
-        Consumer<String> consumer = this::parseLanguage;
-        DBManager.callServer(url,getBaseContext(),consumer);
-    }
-
-    public void parseLanguage(String response) {
-        try{
-            JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
-            JSONObject jObj = jArr.getJSONObject(0);
             if(jObj.getString("Language").equals("English")){
                 chosen_language = 0;
             }
@@ -215,7 +183,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showWeekdayDialog() {
-        updateFirstDay();
+        updateData();
         String[] weekdaysToShow = {getString(R.string.Monday), getString(R.string.Sunday)};
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.chooseFirstDayOfWeek))
@@ -234,7 +202,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showLanguageDialog() {
-        updateLanguage();
+        updateData();
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.ChooseLanguage))
                 .setSingleChoiceItems(languages, chosen_language,
