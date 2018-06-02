@@ -32,10 +32,10 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.HabitFragment;
-import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.NewHabit;
-import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Reward.NewReward;
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.HabitNew;
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Reward.RewardNew;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Reward.RewardFragment;
-import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo.NewTodo;
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo.TodoNew;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo.TodoFragment;
 
 
@@ -49,10 +49,10 @@ public class MainActivity extends AppCompatActivity
     private RewardFragment mRewardFragment;
     private FloatingActionsMenu fab;
     private String[] languages = {"English", "中文"};
-    private int chosen_language = 0;    //0->English, 1->Chinese
+    private int chosenLanguage = 0;    //0->English, 1->Chinese
     private String[] weekdays = {"Monday","Sunday"};
-    private int chosen_first_day = 0;   //0->Monday, 1->Sunday
-    private TextView current_coin_number;
+    private int chosenFirstDay = 0;   //0->Monday, 1->Sunday
+    private TextView currentCoinNumber;
     private DrawerLayout drawer;
     private Toolbar toolbar;
 
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
-        current_coin_number = headerView.findViewById(R.id.current_coin_number);
+        currentCoinNumber = headerView.findViewById(R.id.current_coin_number);
         updateData();
 
         //add bottom navigation bar
@@ -119,20 +119,20 @@ public class MainActivity extends AppCompatActivity
             JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
             JSONObject jObj = jArr.getJSONObject(0);
 
-            current_coin_number.setText(jObj.getString("Coins"));
+            currentCoinNumber.setText(jObj.getString("Coins"));
 
             if(jObj.getString("FirstDay").equals("Monday")){
-                chosen_first_day = 0;
+                chosenFirstDay = 0;
             }
             else {
-                chosen_first_day = 1;
+                chosenFirstDay = 1;
             }
 
             if(jObj.getString("Language").equals("English")){
-                chosen_language = 0;
+                chosenLanguage = 0;
             }
             else {
-                chosen_language = 1;
+                chosenLanguage = 1;
             }
         }
         catch (JSONException e) {
@@ -187,15 +187,15 @@ public class MainActivity extends AppCompatActivity
         String[] weekdaysToShow = {getString(R.string.Monday), getString(R.string.Sunday)};
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.chooseFirstDayOfWeek))
-                .setSingleChoiceItems(weekdaysToShow, chosen_first_day,
-                        (dialog, which) -> chosen_first_day = which
+                .setSingleChoiceItems(weekdaysToShow, chosenFirstDay,
+                        (dialog, which) -> chosenFirstDay = which
                 )
                 .setPositiveButton(getString(R.string.ok),
                         (dialog, which) -> {
-                            Toast.makeText(getApplicationContext(), weekdaysToShow[chosen_first_day],
+                            Toast.makeText(getApplicationContext(), weekdaysToShow[chosenFirstDay],
                                     Toast.LENGTH_LONG).show();
                             String url = "http://api.a17-sd603.studev.groept.be/set_first_day/" +
-                                    weekdays[chosen_first_day];
+                                    weekdays[chosenFirstDay];
                             DBManager.callServer(url, getBaseContext());
                         })
                 .show();
@@ -205,21 +205,21 @@ public class MainActivity extends AppCompatActivity
         updateData();
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.ChooseLanguage))
-                .setSingleChoiceItems(languages, chosen_language,
-                        (dialog, which) -> chosen_language = which
+                .setSingleChoiceItems(languages, chosenLanguage,
+                        (dialog, which) -> chosenLanguage = which
                 )
                 .setPositiveButton(getString(R.string.ok),
                         (dialog, which) -> {
-                            Toast.makeText(getApplicationContext(), languages[chosen_language],
+                            Toast.makeText(getApplicationContext(), languages[chosenLanguage],
                                     Toast.LENGTH_LONG).show();
-                            if(languages[chosen_language].equals("English")){
+                            if(languages[chosenLanguage].equals("English")){
                                 setLocale("en");
                             }
                             else{
                                 setLocale("zh");
                             }
                             String url = "http://api.a17-sd603.studev.groept.be/set_language/" +
-                                    languages[chosen_language];
+                                    languages[chosenLanguage];
                             DBManager.callServer(url, getBaseContext());
 
                         })
@@ -286,17 +286,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onClickNewHabit(View view) {
-        Intent intent = new Intent(this, NewHabit.class);
+        Intent intent = new Intent(this, HabitNew.class);
         startActivity(intent);
     }
 
     public void onClickNewTodo(View view) {
-        Intent intent = new Intent(this, NewTodo.class);
+        Intent intent = new Intent(this, TodoNew.class);
         startActivity(intent);
     }
 
     public void onClickNewReward(View view) {
-        Intent intent = new Intent(this, NewReward.class);
+        Intent intent = new Intent(this, RewardNew.class);
         startActivity(intent);
     }
 

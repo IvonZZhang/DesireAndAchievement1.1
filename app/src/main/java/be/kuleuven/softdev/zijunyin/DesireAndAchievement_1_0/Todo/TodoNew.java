@@ -2,9 +2,7 @@ package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -16,11 +14,12 @@ import java.util.Calendar;
 
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.mNew;
 
 
-public class NewTodo extends AppCompatActivity{
+public class TodoNew extends mNew{
     private TextView chosenDDL;
-    private String chosenDDL_string;
+    private String chosenDDLString;
 
     private DatePickerDialog datePickerDialog;
 
@@ -39,18 +38,9 @@ public class NewTodo extends AppCompatActivity{
         String date=sdf.format(new java.util.Date());
         chosenDDL = findViewById(R.id.choose_ddl);
         chosenDDL.setText(date);
-        chosenDDL_string = date;
+        chosenDDLString = date;
 
         calendar = Calendar.getInstance();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==android.R.id.home){
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     public void finishSaveTodo(View view){
@@ -65,7 +55,7 @@ public class NewTodo extends AppCompatActivity{
 
             String url = "http://api.a17-sd603.studev.groept.be/add_todo/" +
                     todo_name + "/" +
-                    chosenDDL_string + "/" +
+                    chosenDDLString + "/" +
                     coins + "/" +
                     "0";
             DBManager.callServer(url, getBaseContext());
@@ -81,7 +71,7 @@ public class NewTodo extends AppCompatActivity{
         datePickerDialog = new DatePickerDialog(
                 this, (view1, year, monthOfYear, dayOfMonth) -> {
                     chosenDDL.setText (year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                    chosenDDL_string = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                    chosenDDLString = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
                 },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),

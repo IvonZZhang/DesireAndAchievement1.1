@@ -1,9 +1,7 @@
 package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Reward;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -11,10 +9,11 @@ import android.widget.Toast;
 
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.mNew;
 
 
-public class NewReward extends AppCompatActivity{
-    private Switch is_repeated_switch;
+public class RewardNew extends mNew{
+    private Switch isRepeatedSwitch;
     private int isRepeated = 0 ;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +25,9 @@ public class NewReward extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        is_repeated_switch = findViewById(R.id.is_repeated_switch);
+        isRepeatedSwitch = findViewById(R.id.is_repeated_switch);
 
-        is_repeated_switch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        isRepeatedSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked)
             {
                 isRepeated = 1;
@@ -39,16 +38,6 @@ public class NewReward extends AppCompatActivity{
             }
         });
 
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if(item.getItemId()==android.R.id.home){
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     public void finishSaveReward(View view){

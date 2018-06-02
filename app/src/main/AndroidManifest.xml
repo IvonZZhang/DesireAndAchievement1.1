@@ -22,15 +22,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.NewHabit"
+            android:name="be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.HabitNew"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name="be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo.NewTodo"
+            android:name="be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo.TodoNew"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name="be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Reward.NewReward"
+            android:name="be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Reward.RewardNew"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity

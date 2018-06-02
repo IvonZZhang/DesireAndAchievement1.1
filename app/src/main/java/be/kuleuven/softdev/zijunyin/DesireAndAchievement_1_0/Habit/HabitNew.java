@@ -2,9 +2,7 @@ package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -13,9 +11,10 @@ import android.widget.Toast;
 
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
+import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.mNew;
 
 
-public class NewHabit extends AppCompatActivity {
+public class HabitNew extends mNew {
     String[] Cycles =  {"Daily","Weekly","Monthly","None"};
     String cycle;
 
@@ -29,15 +28,6 @@ public class NewHabit extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
         cycle = "Daily";
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==android.R.id.home){
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     public void finishSaveHabit(View view){
