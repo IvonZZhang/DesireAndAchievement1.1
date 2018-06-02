@@ -19,8 +19,6 @@ public class UserManual extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        //监听左上角的返回箭头
         if(item.getItemId()==android.R.id.home){
             finish();
             return true;

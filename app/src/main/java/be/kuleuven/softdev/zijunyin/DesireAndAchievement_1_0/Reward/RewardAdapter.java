@@ -125,7 +125,7 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
                 //add new coins from achieved
                 url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
                 DBManager.callServer(url, context);
-                Toast.makeText(view.getContext(), "You deserve it!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), R.string.YouDeserve, Toast.LENGTH_SHORT).show();
 
                 Consumer<String> consumer = this::getCurCoins;
                 url = "http://api.a17-sd603.studev.groept.be/get_coins";
@@ -143,8 +143,7 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
                 }
             }
             else {
-                Toast.makeText(context, "You don't have enough coins!"+
-                        "\nEarn more coins then reward yourself",
+                Toast.makeText(context, R.string.WarmLessOfCoins,
                         Toast.LENGTH_LONG).show();
             }
             holder.swipeLayout.close();
@@ -160,7 +159,7 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, rewardArray.size());
             mItemManger.closeAllItems();
-            Toast.makeText(v.getContext(), "Deleted ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(v.getContext(), R.string.delete, Toast.LENGTH_SHORT).show();
         });
 
         //apply ViewHolder

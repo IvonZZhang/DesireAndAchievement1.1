@@ -75,7 +75,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
                 android:orientation="horizontal"
-                android:onClick="showDialog">
+                android:onClick="showDateDialog">
 
                 <TextView
                     android:id="@+id/ddl"

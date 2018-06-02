@@ -111,7 +111,7 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
             //add new coins from achieved
             url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
             DBManager.callServer(url, context);
-            Toast.makeText(view.getContext(), "AWESOME!", Toast.LENGTH_LONG).show();
+            Toast.makeText(view.getContext(), R.string.Awesome, Toast.LENGTH_LONG).show();
             url = "http://api.a17-sd603.studev.groept.be/change_todo_delete_status/" + todoArray.get(position).getId();
             DBManager.callServer(url, context);
 
@@ -133,7 +133,7 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, todoArray.size());
             mItemManger.closeAllItems();
-            Toast.makeText(v.getContext(), "Deleted ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(v.getContext(), R.string.delete, Toast.LENGTH_SHORT).show();
         });
 
         //apply ViewHolder

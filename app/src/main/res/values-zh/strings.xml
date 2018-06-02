@@ -124,4 +124,10 @@
     <string name="chooseFirstDayOfWeek">选择一周的开始</string>
     <string name="AboutUs">关于</string>
     <string name="UserManual">用户手册</string>
+
+    <string name="WarmFillAll">还有未完成的选项哦！</string>
+    <string name="WarmLessOfCoins">你没有足够的金币！先完成更多任务吧</string>
+    <string name="YouDeserve">你太棒啦！</string>
+    <string name="Awesome">你太棒啦！</string>
+    <string name="YouDidIt">你做到了！</string>
 </resources>

@@ -48,8 +48,7 @@ public class MainActivity extends AppCompatActivity
     private TodoFragment mTodoFragment;
     private RewardFragment mRewardFragment;
     private FloatingActionsMenu fab;
-    private int lastPosition;
-    private String[] languages = {"English", "Chinese"};
+    private String[] languages = {"English", "中文"};
     private int chosen_language = 0;    //0->English, 1->Chinese
     private String[] weekdays = {"Monday","Sunday"};
     private int chosen_first_day = 0;   //0->Monday, 1->Sunday
@@ -91,6 +90,9 @@ public class MainActivity extends AppCompatActivity
         bottomNavigationBar.setTabSelectedListener(this);
 
         setDefaultFragment();
+
+        updateFirstDay();
+        updateLanguage();
     }
 
     private void setDrawerToggle() {
@@ -120,6 +122,50 @@ public class MainActivity extends AppCompatActivity
             JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
             JSONObject jObj = jArr.getJSONObject(0);
             current_coin_number.setText(jObj.getString("Coins"));
+        }
+        catch (JSONException e) {
+            System.out.println(e);
+        }
+    }
+
+    public void updateFirstDay(){
+        String url = "http://api.a17-sd603.studev.groept.be/get_first_day";
+        Consumer<String> consumer = this::parseFirstDay;
+        DBManager.callServer(url,getBaseContext(),consumer);
+    }
+
+    public void parseFirstDay(String response) {
+        try{
+            JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
+            JSONObject jObj = jArr.getJSONObject(0);
+            if(jObj.getString("FirstDay").equals("Monday")){
+                chosen_first_day = 0;
+            }
+            else {
+                chosen_first_day = 1;
+            }
+        }
+        catch (JSONException e) {
+            System.out.println(e);
+        }
+    }
+
+    public void updateLanguage(){
+        String url = "http://api.a17-sd603.studev.groept.be/get_language";
+        Consumer<String> consumer = this::parseLanguage;
+        DBManager.callServer(url,getBaseContext(),consumer);
+    }
+
+    public void parseLanguage(String response) {
+        try{
+            JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
+            JSONObject jObj = jArr.getJSONObject(0);
+            if(jObj.getString("Language").equals("English")){
+                chosen_language = 0;
+            }
+            else {
+                chosen_language = 1;
+            }
         }
         catch (JSONException e) {
             System.out.println(e);
@@ -169,14 +215,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showWeekdayDialog() {
+        updateFirstDay();
+        String[] weekdaysToShow = {getString(R.string.Monday), getString(R.string.Sunday)};
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.chooseFirstDayOfWeek))
-                .setSingleChoiceItems(weekdays, chosen_first_day,
+                .setSingleChoiceItems(weekdaysToShow, chosen_first_day,
                         (dialog, which) -> chosen_first_day = which
                 )
                 .setPositiveButton(getString(R.string.ok),
                         (dialog, which) -> {
-                            Toast.makeText(getApplicationContext(), weekdays[chosen_first_day],
+                            Toast.makeText(getApplicationContext(), weekdaysToShow[chosen_first_day],
                                     Toast.LENGTH_LONG).show();
                             String url = "http://api.a17-sd603.studev.groept.be/set_first_day/" +
                                     weekdays[chosen_first_day];
@@ -186,12 +234,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showLanguageDialog() {
+        updateLanguage();
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.ChooseLanguage))
                 .setSingleChoiceItems(languages, chosen_language,
                         (dialog, which) -> chosen_language = which
                 )
-                .setPositiveButton("OK",
+                .setPositiveButton(getString(R.string.ok),
                         (dialog, which) -> {
                             Toast.makeText(getApplicationContext(), languages[chosen_language],
                                     Toast.LENGTH_LONG).show();
@@ -201,6 +250,9 @@ public class MainActivity extends AppCompatActivity
                             else{
                                 setLocale("zh");
                             }
+                            String url = "http://api.a17-sd603.studev.groept.be/set_language/" +
+                                    languages[chosen_language];
+                            DBManager.callServer(url, getBaseContext());
 
                         })
                 .show();
@@ -221,7 +273,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onTabSelected(int position) {
-        lastPosition = position;
+        fab.collapse();
         Log.d(TAG, "onTabSelected() called with: " + "position = [" + position + "]");
         FragmentManager fm = this.getFragmentManager();
         //open fragment

@@ -113,8 +113,8 @@
     <string name="deadline">Deadline</string>
     <string name="overdue">OVERDUE</string>
     <string name="edit">edit</string>
-    <string name="complete">complete</string>
-    <string name="delete">delete</string>
+    <string name="complete">Complete</string>
+    <string name="delete">Delete</string>
     <string name="NewHabit">New Habit</string>
 
     <string name="NewTodo">New Todo</string>
@@ -130,6 +130,10 @@
     <string name="AboutUs">About us</string>
     <string name="UserManual">User Manual</string>
 
-
+    <string name="WarmFillAll">Please fill in all conditions!</string>
+    <string name="WarmLessOfCoins">You do not have enough coins! Earn more coins then reward yourself</string>
+    <string name="YouDeserve">You deserve it!</string>
+    <string name="Awesome">AWESOME!</string>
+    <string name="YouDidIt">You did it!</string>
 
 </resources>

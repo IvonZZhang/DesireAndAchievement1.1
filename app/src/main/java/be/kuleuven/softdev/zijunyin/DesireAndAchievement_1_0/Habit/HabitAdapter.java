@@ -91,14 +91,6 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
             public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {}
         });
 
-        //Set On Click Listener to menu elements
-        /*holder.btnLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(view.getContext(), "Clicked on Information ", Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
         holder.Complete.setOnClickListener(view -> {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             TimeZone timeZone = TimeZone.getDefault();
@@ -202,7 +194,7 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
             url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
             DBManager.callServer(url, context);
 
-            Toast.makeText(view.getContext(), "You did it!", Toast.LENGTH_LONG).show();
+            Toast.makeText(view.getContext(), R.string.YouDidIt, Toast.LENGTH_LONG).show();
             //holder.
             holder.swipeLayout.close();
         });
@@ -216,7 +208,7 @@ public class HabitAdapter extends RecyclerSwipeAdapter<HabitAdapter.ViewHolder> 
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, habitArray.size());
             mItemManger.closeAllItems();
-            Toast.makeText(view.getContext(), "Deleted ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(view.getContext(), R.string.delete, Toast.LENGTH_SHORT).show();
         });
 
         //apply ViewHolder
