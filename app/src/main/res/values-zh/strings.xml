@@ -1,0 +1,127 @@
+<resources>
+    <string name="app_name">欲望与成就</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="habit">习惯</string>
+    <string name="todo">待办</string>
+    <string name="reward">奖励</string>
+    <string name="new_habit_hint">输入您的习惯名称</string>
+    <string name="new_todo_hint">输入您的待办名称</string>
+    <string name="new_reward_hint">输入您的奖励名称</string>
+
+    <string name="save">保存</string>
+
+    <string name="gain_coin">获得的金币奖励</string>
+    <string name="times_cycle">每周期应完成的次数</string>
+    <string name="choose_cycle">选择周期长度</string>
+    <string name="choose">选择</string>
+    <string name="your_cycle">你的周期</string>
+
+    <string name="date">日期</string>
+    <string name="ddl">选择待办截止日期</string>
+    <string name="choose_parent_of_new">Choose parent of new</string>
+    <string name="parent">Parent</string>
+    <string name="none">无</string>
+
+    <string name="cost_coin">消耗的金币数量</string>
+    <string name="repeat">重复任务</string>
+
+    <string name="Coins">金币:</string>
+    <string name="default_coin_number">0</string>
+
+    <string name="user_manual">用户手册</string>
+    <string name="language">语言</string>
+    <string name="first_weekday">一周的开始</string>
+    <string name="about">关于</string>
+
+    <string name="user_manual_text_info">
+        这个应用会帮助您更好地进行自我管理。
+        \n通过完成习惯和待办来获取金币，花费金币来满足欲望。
+    </string>
+    <string name="user_manual_label_1">
+        使用指南
+    </string>
+    <string name="user_manual_text_1">
+        -左划来完成任务
+        \n-右划来删除任务
+        \n-单击 + 来创建一个新的习惯、待办或奖励。
+        \n-从屏幕左侧拉出抽屉查看更多内容。
+    </string>
+    <string name="user_manual_label_2">
+        习惯
+    </string>
+    <string name="user_manual_text_2">
+        在这里记录你的日常习惯。例：早上七点之前起床，晚上十一点之前上床休息。
+        \n你可以为每个任务设置一个金币奖励，每当你完成一次任务，就可以获得对应的金币奖励。
+    </string>
+    <string name="user_manual_label_3">
+        待办
+    </string>
+    <string name="user_manual_text_3">
+        你也可以通过完成待办事项来获得金币。待办事项记录你所有将要完成的一次性任务。
+    </string>
+    <string name="user_manual_label_4">
+        奖励
+    </string>
+    <string name="user_manual_text_4">
+        在这里满足你的欲望！例：买一双新鞋、去吃一顿大餐。
+        \n每个欲望都需要设定一个合理的“价格”，你需要通过完成任务来获取金币去实现这些欲望。\n\n\n\n
+    </string>
+
+    <string name="about_text">
+        开发者：殷子珺、张义枫
+        \nPowered by Prof. Wauters Jeroen, KULeuven.
+        \n©2018 All rights reserved.
+        \n
+        \n喜欢使用请捐赠:) 用户的支持是对开发者最大的鼓励
+    </string>
+
+    <string name="title_activity_habit">HabitActivity</string>
+    <string name="cycle">CycleAndTimes</string>
+    <string name="times">Times</string>
+    <string name="habitname">habitName</string>
+    <string name="plus">+</string>
+    <string name="coinNumber">coinNumber</string>
+    <string name="next_ddl">Next DDL</string>
+    <string name="todoname">todoName</string>
+    <string name="expandableicon">expandableIcon</string>
+    <string name="icontoanotheracivity">IconToAnotherActivity</string>
+    <string name="ToAnotherActivity">ToAnotherActivity</string>
+    <string name="icontoalertdialog">IconToAlertDialog</string>
+    <string name="toalertdialog">ToAlertDialog</string>
+    <string name="icontoswitch">IconToSwitch</string>
+    <string name="toSwitch">ToSwitch</string>
+    <string name="textselected">TextSelected</string>
+    <string name="please_choose_your_language">请选择语言</string>
+    <string name="ok">确认</string>
+    <string name="cancel">取消</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="name">名称</string>
+    <string name="rewardname">奖励名称</string>
+    <string name="isrepeat">重复</string>
+    <string name="todo_name">待办名称</string>
+    <string name="deadline">截止日期</string>
+    <string name="overdue">已过期</string>
+    <string name="edit">edit</string>
+    <string name="complete">完成</string>
+    <string name="delete">删除</string>
+    <string name="NewHabit">新建习惯</string>
+
+    <string name="NewTodo">新建待办</string>
+    <string name="NewReward">新建奖励</string>
+    <string name="Habit">习惯</string>
+    <string name="Todo">待办</string>
+    <string name="Reward">奖励</string>
+    <string name="Monday">星期一</string>
+    <string name="Sunday">星期日</string>
+    <string name="ChooseLanguage">选择语言</string>
+    <string name="chooseFirstDayOfWeek">选择一周的开始</string>
+    <string name="AboutUs">关于</string>
+    <string name="UserManual">用户手册</string>
+</resources>
