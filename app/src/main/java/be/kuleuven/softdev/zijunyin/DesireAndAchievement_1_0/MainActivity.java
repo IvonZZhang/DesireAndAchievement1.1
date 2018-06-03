@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -29,7 +30,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Locale;
-import java.util.function.Consumer;
 
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.HabitFragment;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.HabitNew;
@@ -110,8 +110,7 @@ public class MainActivity extends AppCompatActivity
 
     public void updateData(){
         String url = "http://api.a17-sd603.studev.groept.be/get_user_data";
-        Consumer<String> consumer = this::parseData;
-        DBManager.callServer(url,getBaseContext(),consumer);
+        DBManager.callServer(url,getBaseContext(), this::parseData);
     }
 
     public void parseData(String response){
@@ -159,7 +158,7 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 

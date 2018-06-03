@@ -43,7 +43,6 @@ import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
 import java.util.ArrayList;
-import java.util.function.Consumer;
 
 public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder>{
     private Context context;
@@ -51,15 +50,15 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
     private int curCoins;
     private String url;
 
-    public RewardAdapter(@NonNull Context context, ArrayList<RewardDataModel> rewardArray) {
+    RewardAdapter(@NonNull Context context, ArrayList<RewardDataModel> rewardArray) {
         this.context = context;
         this.rewardArray = rewardArray;
         curCoins = 0;
-        Consumer<String> consumer = this::getCurCoins;
         url = "http://api.a17-sd603.studev.groept.be/get_coins";
-        DBManager.callServer(url, context, consumer);
+        DBManager.callServer(url, context, this::getCurCoins);
     }
 
+    @NonNull
     @Override
     public RewardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -68,7 +67,7 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(final RewardAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final RewardAdapter.ViewHolder holder, final int position) {
         //Assign values
         holder.mReward = rewardArray.get(position);
         holder.rewardName.setText(rewardArray.get(position).getName());
@@ -87,7 +86,71 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
         holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.bottom_wrapper1));
         holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.bottom_wraper));
 
-        //Create swipe listener
+        createSwipeListener(holder);
+
+        setCompleteOnClickListener(holder, position);
+        setDeleteOnClickListener(holder, position);
+
+        //apply ViewHolder
+        mItemManger.bindView(holder.itemView, position);
+    }
+
+    private void setDeleteOnClickListener(ViewHolder holder, int position) {
+        holder.Delete.setOnClickListener(v -> {
+
+            String url = "http://api.a17-sd603.studev.groept.be/change_reward_delete_status/" + rewardArray.get(position).getId();
+            DBManager.callServer(url, context);
+
+            mItemManger.removeShownLayouts(holder.swipeLayout);
+            rewardArray.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, rewardArray.size());
+            mItemManger.closeAllItems();
+            Toast.makeText(v.getContext(), R.string.delete, Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void setCompleteOnClickListener(ViewHolder holder, int position) {
+        holder.Complete.setOnClickListener(view -> {
+            updateCoinNumber();
+            int costCoin = Integer.parseInt(rewardArray.get(position).getCoins());
+            System.out.println("before if costCoin"+costCoin);
+            System.out.println("before if curCoins"+curCoins);
+
+            if(curCoins > Math.abs(costCoin)){
+                int newCoins = curCoins + costCoin;
+                System.out.println("costCoin" + costCoin);
+                System.out.println("curCoins" + curCoins);
+                System.out.println("newCoins" + newCoins);
+                curCoins = newCoins;
+                //add new coins from achieved
+                url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
+                DBManager.callServer(url, context);
+                Toast.makeText(view.getContext(), R.string.YouDeserve, Toast.LENGTH_SHORT).show();
+
+                url = "http://api.a17-sd603.studev.groept.be/get_coins";
+                DBManager.callServer(url, context, this::getCurCoins);
+
+                if(rewardArray.get(position).isRepeated().equals("0")){
+                    String url = "http://api.a17-sd603.studev.groept.be/change_reward_delete_status/" + rewardArray.get(position).getId();
+                    DBManager.callServer(url, context);
+
+                    mItemManger.removeShownLayouts(holder.swipeLayout);
+                    rewardArray.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, rewardArray.size());
+                    mItemManger.closeAllItems();
+                }
+            }
+            else {
+                Toast.makeText(context, R.string.WarmLessOfCoins,
+                        Toast.LENGTH_LONG).show();
+            }
+            holder.swipeLayout.close();
+        });
+    }
+
+    private void createSwipeListener(ViewHolder holder) {
         holder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
             @Override
             public void onStartOpen(SwipeLayout layout) {}
@@ -107,63 +170,6 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
             @Override
             public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {}
         });
-
-        //Set On Click Listener to menu elements
-
-        holder.Complete.setOnClickListener(view -> {
-            updateCoinNumber();
-            int costCoin = Integer.parseInt(rewardArray.get(position).getCoins());
-            System.out.println("before if costCoin"+costCoin);
-            System.out.println("before if curCoins"+curCoins);
-
-            if(curCoins > Math.abs(costCoin)){
-                int newCoins = curCoins + costCoin;
-                System.out.println("costCoin" + costCoin);
-                System.out.println("curCoins" + curCoins);
-                System.out.println("newCoins" + newCoins);
-                curCoins = newCoins;
-                //add new coins from achieved
-                url = "http://api.a17-sd603.studev.groept.be/set_coins/" + newCoins;
-                DBManager.callServer(url, context);
-                Toast.makeText(view.getContext(), R.string.YouDeserve, Toast.LENGTH_SHORT).show();
-
-                Consumer<String> consumer = this::getCurCoins;
-                url = "http://api.a17-sd603.studev.groept.be/get_coins";
-                DBManager.callServer(url, context, consumer);
-
-                if(rewardArray.get(position).isRepeated().equals("0")){
-                    String url = "http://api.a17-sd603.studev.groept.be/change_reward_delete_status/" + rewardArray.get(position).getId();
-                    DBManager.callServer(url, context);
-
-                    mItemManger.removeShownLayouts(holder.swipeLayout);
-                    rewardArray.remove(position);
-                    notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, rewardArray.size());
-                    mItemManger.closeAllItems();
-                }
-            }
-            else {
-                Toast.makeText(context, R.string.WarmLessOfCoins,
-                        Toast.LENGTH_LONG).show();
-            }
-            holder.swipeLayout.close();
-        });
-
-        holder.Delete.setOnClickListener(v -> {
-
-            String url = "http://api.a17-sd603.studev.groept.be/change_reward_delete_status/" + rewardArray.get(position).getId();
-            DBManager.callServer(url, context);
-
-            mItemManger.removeShownLayouts(holder.swipeLayout);
-            rewardArray.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, rewardArray.size());
-            mItemManger.closeAllItems();
-            Toast.makeText(v.getContext(), R.string.delete, Toast.LENGTH_SHORT).show();
-        });
-
-        //apply ViewHolder
-        mItemManger.bindView(holder.itemView, position);
     }
 
     @Override
@@ -201,7 +207,7 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
         return R.id.swipe;
     }
 
-    public void getCurCoins(String response) {
+    private void getCurCoins(String response) {
         try{
             JSONArray jArr = new JSONArray(response);
             for(int i = 0; i < jArr.length(); i++){
@@ -215,13 +221,12 @@ public class RewardAdapter extends RecyclerSwipeAdapter<RewardAdapter.ViewHolder
         }
     }
 
-    public void updateCoinNumber(){
+    private void updateCoinNumber(){
         String url = "http://api.a17-sd603.studev.groept.be/get_coin_number";
-        Consumer<String> consumer = this::parseCoinData;
-        DBManager.callServer(url,context,consumer);
+        DBManager.callServer(url,context, this::parseCoinData);
     }
 
-    public void parseCoinData(String response) {
+    private void parseCoinData(String response) {
         try{
             JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
             JSONObject jObj = jArr.getJSONObject(0);

@@ -13,7 +13,6 @@ import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.mNew;
 
 
 public class RewardNew extends mNew{
-    private Switch isRepeatedSwitch;
     private int isRepeated = 0 ;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +24,7 @@ public class RewardNew extends mNew{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        isRepeatedSwitch = findViewById(R.id.is_repeated_switch);
+        Switch isRepeatedSwitch = findViewById(R.id.is_repeated_switch);
 
         isRepeatedSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked)

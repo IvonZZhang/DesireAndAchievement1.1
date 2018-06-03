@@ -9,13 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.daimajia.swipe.util.Attributes;
 
 import org.json.JSONArray;
@@ -23,7 +16,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
-import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DataModel;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 
 import java.text.DateFormat;
@@ -32,8 +24,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Locale;
-import java.util.function.Consumer;
 
 public class TodoFragment extends Fragment {
 
@@ -51,8 +41,7 @@ public class TodoFragment extends Fragment {
         DBManager.callServer(url_space, getContext());
 
         String url ="http://api.a17-sd603.studev.groept.be/testTodo";
-        Consumer<String> consumer = this::parseTodoData;
-        DBManager.callServer(url, getContext(), consumer);
+        DBManager.callServer(url, getContext(), this::parseTodoData);
     }
 
     @Override
@@ -63,10 +52,6 @@ public class TodoFragment extends Fragment {
         todoList = view.findViewById(R.id.todoRecyclerView);
         todoList.setLayoutManager(new LinearLayoutManager(getContext()));
         todoArray = new ArrayList<>();
-
-//        String url ="http://api.a17-sd603.studev.groept.be/testTodo";
-//        Consumer<String> consumer = this::parseTodoData;
-//        DBManager.callServer(url, getContext(), consumer);
 
         /*if(todoArray.isEmpty()){
             todoList.setVisibility(View.GONE);
@@ -93,41 +78,36 @@ public class TodoFragment extends Fragment {
     public void parseTodoData(String response) {
         try{
             todoArray = new ArrayList<>();
-            JSONArray jArr = new JSONArray(response);//response is String but a JSONArray needed, so add it into try-catch
+            JSONArray jArr = new JSONArray(response);
             for(int i = 0; i < jArr.length(); i++){
                 JSONObject jObj = jArr.getJSONObject( i );
                 int curTodoId = jObj.getInt("idTodo");
                 String curTodoName = jObj.getString("TodoName");
                 String curDDL = jObj.getString("Deadline");
                 String curRewardCoins = jObj.getString("RewardCoins");
-                //String curIsDeleted = jObj.getString("isDeleted");
-//                if(jObj.getInt("isDeleted") == 0){
-                    todoArray.add(
-                            new TodoDataModel(curTodoId, curTodoName, curDDL, curRewardCoins)
-                    );
-//                }
-            }
-            Comparator<TodoDataModel> comparator = new Comparator<TodoDataModel>() {
-                @Override
-                public int compare(TodoDataModel o1, TodoDataModel o2) {
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    Date date1 = new Date();
-                    Date date2 = new Date();
-                    try{
-                        date1 = dateFormat.parse(o1.getTodoDDL());
-                        date2 = dateFormat.parse(o2.getTodoDDL());
+                todoArray.add(
+                        new TodoDataModel(curTodoId, curTodoName, curDDL, curRewardCoins)
+                );
 
-                    }
-                    catch(Exception e){
-                        System.out.println(e);
-                    }
-                    if(date1.before(date2)){
-                        return -1;
-                    }
-                    else return 1;
+            }
+            Comparator<TodoDataModel> comparator = (o1, o2) -> {
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date date1 = new Date();
+                Date date2 = new Date();
+                try{
+                    date1 = dateFormat.parse(o1.getTodoDDL());
+                    date2 = dateFormat.parse(o2.getTodoDDL());
+
                 }
+                catch(Exception e){
+                    System.out.println(e);
+                }
+                if(date1.before(date2)){
+                    return -1;
+                }
+                else return 1;
             };
-            Collections.sort(todoArray, comparator);
+            todoArray.sort(comparator);
             TodoAdapter habitAdapter = new TodoAdapter(getContext(), todoArray);
             habitAdapter.setMode(Attributes.Mode.Single);
             todoList.setAdapter(habitAdapter);

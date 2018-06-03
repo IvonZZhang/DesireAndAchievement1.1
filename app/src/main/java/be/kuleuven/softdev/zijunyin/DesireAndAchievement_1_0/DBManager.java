@@ -25,5 +25,4 @@ public class DBManager {
                 responseConsumer::accept, error -> System.out.println("failed to work"));
         queue.add(stringRequest);
     }
-
 }

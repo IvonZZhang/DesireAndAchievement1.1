@@ -1,7 +1,6 @@
 package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Todo;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,7 +24,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.function.Consumer;
 
 public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
     private Context context;
@@ -33,15 +31,15 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
     private String url;
     private int curCoins;
 
-    public TodoAdapter(@NonNull Context context, ArrayList<TodoDataModel> todoArray) {
+    TodoAdapter(@NonNull Context context, ArrayList<TodoDataModel> todoArray) {
         this.context = context;
         this.todoArray = todoArray;
         curCoins = 0;
-        Consumer<String> consumer = this::getCurCoins;
         url = "http://api.a17-sd603.studev.groept.be/get_coins";
-        DBManager.callServer(url, context, consumer);
+        DBManager.callServer(url, context, this::getCurCoins);
     }
 
+    @NonNull
     @Override
     public TodoAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -50,59 +48,44 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(final TodoAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final TodoAdapter.ViewHolder holder, final int position) {
         //Assign values
         holder.mTodo = todoArray.get(position);
         holder.todoName.setText(todoArray.get(position).getName());
         holder.deadline.setText(todoArray.get(position).getTodoDDL());
         holder.coinNumber.setText(String.format("+ %s", todoArray.get(position).getCoins()));
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date convertedDate = new Date();
-        try {
-            convertedDate = dateFormat.parse(holder.deadline.getText().toString());
-        }
-        catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Calendar nowCalendar = Calendar.getInstance();
-        nowCalendar.add(Calendar.DATE, -1);
-        Date now = nowCalendar.getTime();
-        if(convertedDate.before(now)){
-            holder.coinNumber.setText(R.string.overdue);
-//            holder.coinNumber.setTextColor(Color.WHITE);
-//            holder.coinNumber.setBackgroundColor(Color.RED);
-//            holder.coinNumber.setTextSize(16);
-            holder.mTodo.setCoins("0");
-        }
+        checkOverdue(holder);
 
         //Create swipe menu
         holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.bottom_wrapper1));
         holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.bottom_wraper));
 
-        //Create swipe listener
-        holder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
-            @Override
-            public void onStartOpen(SwipeLayout layout) {}
+        createSwipeListener(holder);
 
-            @Override
-            public void onOpen(SwipeLayout layout) {}
+        setCompleteOnClickListener(holder, position);
+        setDeleteOnClickListener(holder, position);
 
-            @Override
-            public void onStartClose(SwipeLayout layout) {}
+        //apply ViewHolder
+        mItemManger.bindView(holder.itemView, position);
+    }
 
-            @Override
-            public void onClose(SwipeLayout layout) {}
+    private void setDeleteOnClickListener(ViewHolder holder, int position) {
+        holder.Delete.setOnClickListener(v -> {
+            url = "http://api.a17-sd603.studev.groept.be/change_todo_delete_status/" + todoArray.get(position).getId();
+            DBManager.callServer(url, context);
 
-            @Override
-            public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {}
-
-            @Override
-            public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {}
+            mItemManger.removeShownLayouts(holder.swipeLayout);
+            todoArray.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, todoArray.size());
+            mItemManger.closeAllItems();
+            Toast.makeText(v.getContext(), R.string.delete, Toast.LENGTH_SHORT).show();
         });
+    }
 
-        //Set On Click Listener to menu elements
+    private void setCompleteOnClickListener(ViewHolder holder, int position) {
         holder.Complete.setOnClickListener(view -> {
             //update current coins
             int newCoins = curCoins + Integer.parseInt(todoArray.get(position).getCoins());
@@ -123,21 +106,46 @@ public class TodoAdapter extends RecyclerSwipeAdapter<TodoAdapter.ViewHolder>{
 
             holder.swipeLayout.close();
         });
+    }
 
-        holder.Delete.setOnClickListener(v -> {
-            url = "http://api.a17-sd603.studev.groept.be/change_todo_delete_status/" + todoArray.get(position).getId();
-            DBManager.callServer(url, context);
+    private void createSwipeListener(ViewHolder holder) {
+        holder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
+            @Override
+            public void onStartOpen(SwipeLayout layout) {}
 
-            mItemManger.removeShownLayouts(holder.swipeLayout);
-            todoArray.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, todoArray.size());
-            mItemManger.closeAllItems();
-            Toast.makeText(v.getContext(), R.string.delete, Toast.LENGTH_SHORT).show();
+            @Override
+            public void onOpen(SwipeLayout layout) {}
+
+            @Override
+            public void onStartClose(SwipeLayout layout) {}
+
+            @Override
+            public void onClose(SwipeLayout layout) {}
+
+            @Override
+            public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {}
+
+            @Override
+            public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {}
         });
+    }
 
-        //apply ViewHolder
-        mItemManger.bindView(holder.itemView, position);
+    private void checkOverdue(ViewHolder holder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date convertedDate = new Date();
+        try {
+            convertedDate = dateFormat.parse(holder.deadline.getText().toString());
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar nowCalendar = Calendar.getInstance();
+        nowCalendar.add(Calendar.DATE, -1);
+        Date now = nowCalendar.getTime();
+        if(convertedDate.before(now)){
+            holder.coinNumber.setText(R.string.overdue);
+            holder.mTodo.setCoins("0");
+        }
     }
 
     private void getCurCoins(String response) {

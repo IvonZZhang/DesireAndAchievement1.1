@@ -1,7 +1,6 @@
 package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +21,6 @@ import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.function.Consumer;
 
 public class HabitFragment extends Fragment {
 
@@ -40,19 +38,8 @@ public class HabitFragment extends Fragment {
         DBManager.callServer(url_space, getContext());
 
         String url ="http://api.a17-sd603.studev.groept.be/testHabit";
-        Consumer<String> consumer = this::parseHabitData;
-        DBManager.callServer(url, getContext(), consumer);
+        DBManager.callServer(url, getContext(), this::parseHabitData);
     }
-
-    public static HabitFragment newInstance(){
-        HabitFragment habitFragment = new HabitFragment();
-        return habitFragment;
-    }
-
-    public HabitFragment getInstance(){
-        return this;
-    }
-/*TODO: refresh the list every time it has changed*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,11 +49,6 @@ public class HabitFragment extends Fragment {
         habitList = view.findViewById(R.id.habitRecyclerView);
         habitList.setLayoutManager(new LinearLayoutManager(getContext()));
         habitArray = new ArrayList<>();
-
-//        String url ="http://api.a17-sd603.studev.groept.be/testHabit";
-//
-//        Consumer<String> consumer = this::parseHabitData;
-//        DBManager.callServer(url, getContext(), consumer);
 
         /*if(habitArray.isEmpty()){
             habitList.setVisibility(View.GONE);
@@ -107,12 +89,10 @@ public class HabitFragment extends Fragment {
                 if(curCycleStartDate.isEmpty()) {
                     curCycleStartDate = dateFormat.format(Calendar.getInstance().getTime());
                 }
-                //if(jObj.getInt("isDeleted") == 0){
-                    habitArray.add(
-                            new HabitDataModel(curHabitId, curHabitName, curHabitCycle, curTimesDone, curTimesPerCycle,
-                                    curRewardCoins, curCycleStartDate)
-                    );
-                //}
+                habitArray.add(
+                        new HabitDataModel(curHabitId, curHabitName, curHabitCycle, curTimesDone, curTimesPerCycle,
+                                curRewardCoins, curCycleStartDate)
+                );
             }
             HabitAdapter habitAdapter = new HabitAdapter(getContext(), habitArray);
             habitAdapter.setMode(Attributes.Mode.Single);

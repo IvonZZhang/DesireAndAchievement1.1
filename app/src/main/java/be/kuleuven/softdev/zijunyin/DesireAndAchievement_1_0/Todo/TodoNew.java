@@ -21,8 +21,6 @@ public class TodoNew extends mNew{
     private TextView chosenDDL;
     private String chosenDDLString;
 
-    private DatePickerDialog datePickerDialog;
-
     private Calendar calendar;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +66,11 @@ public class TodoNew extends mNew{
     }
 
     public void showDateDialog(View view) {
-        datePickerDialog = new DatePickerDialog(
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
                 this, (view1, year, monthOfYear, dayOfMonth) -> {
-                    chosenDDL.setText (year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                    chosenDDLString = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
-                },
+            chosenDDL.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+            chosenDDLString = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+        },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));

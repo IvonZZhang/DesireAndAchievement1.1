@@ -1,6 +1,5 @@
 package be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0;
 
-
 public class DataModel {
     protected int id;
     protected String name;

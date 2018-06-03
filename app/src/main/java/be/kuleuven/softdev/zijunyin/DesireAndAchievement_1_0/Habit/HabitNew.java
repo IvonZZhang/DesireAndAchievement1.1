@@ -57,7 +57,6 @@ public class HabitNew extends mNew {
             Toast.makeText(getApplicationContext(), R.string.WarmFillAll,
                     Toast.LENGTH_LONG).show();
         }
-
     }
 
     public void chooseCycle(View view){
@@ -76,5 +75,4 @@ public class HabitNew extends mNew {
                 WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
                 WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
     }
-
 }

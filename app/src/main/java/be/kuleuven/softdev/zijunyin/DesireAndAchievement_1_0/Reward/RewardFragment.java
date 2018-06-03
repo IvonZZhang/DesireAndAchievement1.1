@@ -9,12 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.daimajia.swipe.util.Attributes;
 
 import org.json.JSONArray;
@@ -22,7 +16,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.function.Consumer;
 
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.DBManager;
 import be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.R;
@@ -42,8 +35,7 @@ public class RewardFragment extends Fragment{
         DBManager.callServer(url_space, getContext());
 
         String url ="http://api.a17-sd603.studev.groept.be/testReward";
-        Consumer<String> consumer = this::parseRewardData;
-        DBManager.callServer(url, getContext(), consumer);
+        DBManager.callServer(url, getContext(), this::parseRewardData);
     }
 
     @Override
@@ -54,10 +46,6 @@ public class RewardFragment extends Fragment{
         rewardList = view.findViewById(R.id.rewardRecyclerView);
         rewardList.setLayoutManager(new LinearLayoutManager(getContext()));
         rewardArray = new ArrayList<>();
-
-//        String url ="http://api.a17-sd603.studev.groept.be/testReward";
-//        Consumer<String> consumer = this::parseRewardData;
-//        DBManager.callServer(url, getContext(), consumer);
 
         /*if(rewardArray.isEmpty()){
             rewardList.setVisibility(View.GONE);
@@ -90,11 +78,9 @@ public class RewardFragment extends Fragment{
                 String curRewardName = jObj.getString("RewardName");
                 String curIsRepeated = jObj.getString("isRepeated");
                 String curRewardCoins = jObj.getString("ConsumedCoins");
-//                if(jObj.getInt("isDeleted") == 0){
-                    rewardArray.add(
-                            new RewardDataModel(curRewardId, curRewardName, curIsRepeated, "-" + curRewardCoins)
-                    );
-//                }
+                rewardArray.add(
+                        new RewardDataModel(curRewardId, curRewardName, curIsRepeated, "-" + curRewardCoins)
+                );
             }
             RewardAdapter rewardAdapter = new RewardAdapter(getContext(), rewardArray);
             rewardAdapter.setMode(Attributes.Mode.Single);
