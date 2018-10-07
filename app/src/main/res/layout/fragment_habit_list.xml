@@ -5,7 +5,7 @@
     android:id="@+id/HabitConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Habit.HabitFragment">
+    tools:context="be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_1.Habit.HabitFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/habitRecyclerView"

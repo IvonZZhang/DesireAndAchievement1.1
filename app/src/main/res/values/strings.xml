@@ -135,5 +135,8 @@
     <string name="YouDeserve">You deserve it!</string>
     <string name="Awesome">AWESOME!</string>
     <string name="YouDidIt">You did it!</string>
+    <string name="empty_not_saved">\"Error! Not saved\"</string>
+    <string name="export_db">Export DB</string>
+    <string name="import_db">Import DB</string>
 
 </resources>

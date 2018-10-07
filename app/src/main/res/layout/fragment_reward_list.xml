@@ -5,7 +5,7 @@
     android:id="@+id/RewardConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_0.Reward.RewardFragment">
+    tools:context="be.kuleuven.softdev.zijunyin.DesireAndAchievement_1_1.Reward.RewardFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rewardRecyclerView"
